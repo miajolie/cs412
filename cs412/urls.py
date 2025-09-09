@@ -21,6 +21,9 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    #second thing you need to add when you are setting up an app, on top of adding 
+    #app to setting.py
     path("hw/", include("hw.urls")),
+    path("quotes/", include("quotes.urls")),
     
 ] + static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)
