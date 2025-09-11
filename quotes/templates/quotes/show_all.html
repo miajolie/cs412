@@ -4,7 +4,17 @@
 {% block content %}
     <h1>All Quotes by {{person}}</h1>
     <!-- make an <ul> that wraps the for loop and executes seperate <li> -->
-
+        <ul> 
+            {% for q in quotes %}
+                <li>“{{ q }}”</li>
+            {% endfor %}
+        </ul>
     <h1>All Images by {{person}}</h1>
     <!-- div wrapper that uses for loop that "returns" each image <img src= alt=>-->
+        <ul> 
+            {% for img in images %}
+                <img src = "{{img}}" alt = "{{person}}">
+            {% endfor %}
+        </ul>
+     
 {% endblock %}
