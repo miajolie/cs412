@@ -40,7 +40,7 @@ def about_page(request):
     # here is where I will be storing all the important information 
     context = {
         "person": "Michael Scott",
-        "bio": "This is the world's greatest boss, brought to you by the world's greatest show: The Office (USA version)",
+        "bio": "Michael Scott is the (fictional) Regional Manager of Dunder Mifflin, Scranton, on The Office. Equal parts cringe and heart, he’s known for his “World’s Best Boss” mug, chaotic management, and occasional flashes of wisdom",
         "note" : "Hi everyone! This is Mia, and I thought it was important to bring some awareness to some great quotes from Michael Scott for CS412",
         }
 

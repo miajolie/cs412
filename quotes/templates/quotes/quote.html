@@ -1,6 +1,12 @@
 {% extends 'quotes/base.html' %}
     {% block content %}
-        <h3>{{person}}</h3>
-        <p> {{quote}}</p>
-        <img class="" src="{{image}}" alt="{{ person }} glam shot">
+    <div class = "card">
+        <h1>{{person}}</h1>
+        <p class = "quotes"> {{quote}}</p>
+        <div class="image-frame">
+            <img class="mike" src="{{image}}" alt="{{ person }} glam shot">
+        </div>
+        
+    </div>
+        
     {% endblock %}
