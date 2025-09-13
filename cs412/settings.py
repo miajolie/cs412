@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "hw", #NEW
     #always need to add new apps when making new ones (python manage.py startapp NAME)
-    "quotes"
+    "quotes",
+    "formdata",
 ]
 
 MIDDLEWARE = [
