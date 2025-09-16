@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     #always need to add new apps when making new ones (python manage.py startapp NAME)
     "quotes",
     "formdata",
+    "restaurant",
 ]
 
 MIDDLEWARE = [
