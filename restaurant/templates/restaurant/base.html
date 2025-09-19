@@ -1,0 +1,32 @@
+{%load static%}
+<html>
+    <!-- <div class = "wrapper"> -->
+        <head>
+            <title>The Spooky Spoon</title>
+            <link rel="stylesheet" href="{% static 'spooky.css' %}" >
+        </head>
+
+        <body>
+            <header class = "site-header">
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="{% url 'main_page' %}">Main Page</a></li>
+                        <li><a href="{% url 'order_page' %}">Order Page</a></li>
+                    </ul>
+                </nav>
+            </header>
+                <main class = "container">
+                    {% block content %}
+                    {% endblock %}
+                </main>
+            <!-- put page speciifc content here -->
+           
+
+            <footer >
+                <p class="site-footer">Page created by miajolie@bu.edu </p>
+            </footer>
+            
+        </body>
+            
+    <!-- </div> -->
+</html>
