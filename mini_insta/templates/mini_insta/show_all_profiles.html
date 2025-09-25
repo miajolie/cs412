@@ -1,0 +1,28 @@
+<!-- blog/show_all.html -->
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<h1>Loyal Subjects of Kier</h1>
+<!-- 
+{{articles}} -->
+
+<main class="grid-container">
+    <!-- scriplet code for a for loop -->
+    {% for profile in profiles %}
+        <profile>
+            <div>
+                <h2>{{profile.username}}</h2>
+                <h3>by {{article.display_name}}</h3>
+            </div>
+            <a href="{% url 'article' article.pk %}">
+                <!-- passing primary key into the article function -->
+                <img src="{{article.image_url}}" alt="hey!">
+            </a>
+        </profile>
+
+        <hr>
+    </main>
+{% endfor %}
+
+
+{%endblock%}

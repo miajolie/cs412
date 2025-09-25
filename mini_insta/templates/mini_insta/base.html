@@ -1,0 +1,27 @@
+{%load static%}
+
+<html>
+    <head>
+        <title>Our Blog</title>
+        <link rel="stylesheet" href="{% static 'severance.css'%}">
+    </head>
+
+    <body>
+        <head>
+            <h1>Lumon Insta</h1>
+            <nav>
+                <ul>
+                    <li><a href = "{% url 'random'%}">Random</a></li>
+                    <li><a href = "{% url 'show_all'%}">Show All</a></li>
+                </ul>
+            </nav>
+        </head>
+
+        <!-- substitute in the specific content here-->
+         {%block content%}
+         {% endblock%}
+
+
+    </body>
+    <footer>The Offical Social Page for those who Praise Kier!</footer>
+</html>
