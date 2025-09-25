@@ -1,5 +1,6 @@
 {%load static%}
 
+
 <html>
     <head>
         <title>Our Blog</title>
@@ -7,21 +8,26 @@
     </head>
 
     <body>
-        <head>
-            <h1>Lumon Insta</h1>
+        <header class="site-header">
+            <div class="site-header-inner">
+                <h1 class="site-title">Lumon Insta</h1>
             <nav>
                 <ul>
                     <li><a href = "{% url 'random'%}">Random</a></li>
                     <li><a href = "{% url 'show_all'%}">Show All</a></li>
                 </ul>
             </nav>
-        </head>
-
-        <!-- substitute in the specific content here-->
-         {%block content%}
-         {% endblock%}
-
-
+            </div>
+            
+        </header>
+ 
+ 
+       <!-- substitute in the specific content here-->
+        <main>
+        {%block content%}
+        {% endblock%}
+        </main>
+       
     </body>
     <footer>The Offical Social Page for those who Praise Kier!</footer>
 </html>
