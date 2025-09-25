@@ -1,0 +1,53 @@
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+
+<main class="profile-page">
+
+  <section class="profile-wrap">
+    <div class="avatar-wrap">
+      <img
+        src="{{ profile.profile_image_url }}"
+        alt="{{profile.display_name}}'s profile photo">
+    </div>
+
+    <div class="profile-meta">
+      <h1 class="display-name">
+        {{ profile.display_name}}
+      </h1>
+        <p class="username">@{{ profile.username }}</p>
+        <p class="bio">{{ profile.bio_text}}</p>
+
+        <!-- stats to be filled in future assignments -->
+      <ul class="stats">
+        <li>
+          <span class="stat-number">TBD</span>
+          <span class="stat-label">Followers</span>
+        </li>
+        <li>
+          <span class="stat-number">TBD</span>
+          <span class="stat-label">Following</span>
+        </li>
+        <li>
+          <span class="stat-number">TBD</span>
+          <span class="stat-label">Posts</span>
+        </li>
+      </ul>
+
+      <div class="actions">
+        <a class="btn" href="{% url 'show_all_profiles' %}">← Back to all profiles</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="profile-posts">
+    <h2>Posts by {{profile.display_name}}</h2>
+
+
+    <div class="placeholder-card">
+      <p>Posts will appear here in a future step.</p>
+    </div>
+  </section>
+
+</main>
+{% endblock %}
