@@ -16,4 +16,4 @@ class ProfileDetailView(DetailView):
 
     model = Profile
     template_name = "mini_insta/show_profile.html"
-    context_object_name = "profile" #singular variable name
+    context_object_name = "profile"

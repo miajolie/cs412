@@ -10,12 +10,14 @@
     {% for profile in profiles %}
         <profile>
             <div>
-                <h2>{{profile.username}}</h2>
-                <h3>by {{profile.display_name}}</h3>
+                <a href="{% url 'show_profile' profile.pk %}">
+                    <h2>{{profile.username}}</h2>
+                    <h3>by {{profile.display_name}}</h3>
+                </a>
             </div>
-            <a href="{% url 'show_profile' profile.pk %}">
-                <img src = "{{profile.profile_image_url}}" alt="profile">
-            </a>
+                <a href="{% url 'show_profile' profile.pk %}">
+                    <img src = "{{profile.profile_image_url}}" alt="profile">
+                </a>
         
         </profile>
 
