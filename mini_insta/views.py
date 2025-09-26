@@ -1,3 +1,5 @@
+# views.py file that obtains all the data for the website 
+
 from django.shortcuts import render
 from django.views.generic import ListView,DetailView
 from .models import Profile

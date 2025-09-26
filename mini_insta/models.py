@@ -1,3 +1,4 @@
+# the Profile model and its attributes for an individual user
 from django.db import models
 
 # Create your models here.
