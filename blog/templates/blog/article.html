@@ -9,7 +9,7 @@
 <main class="grid-container">
     <!-- scriplet code for a for loop -->
 
-        <article>
+        <article class="featured">
             <div>
                 <h2>{{article.title}}</h2>
                 <h3>by {{article.author}}</h3>
@@ -19,9 +19,31 @@
             </div>
             
             <img src="{{article.image_url}}" alt="hey!">
+
+            <div>
+
+                <h2>Comments</h2>
+                <h3>
+                    <a href="{% url 'create_comment' article.pk %}"> Create a Comment</a>
+                </h3>
+                <!-- Dsiplay the comments about this article-->
+                <!-- {{article.get_all_comments}} -->
+                {% for comment in article.get_all_comments %}
+                    <div>
+                        <strong> by {{comment.author}} at {{comment.published}}</strong>
+                        <p>
+                            {{comment.text}}
+                        </p>
+
+                    </div>
+
+                {% endfor%}
+
+            </div>
+            
         </article>
 
-        <hr>
+        
 </main>
 
 
