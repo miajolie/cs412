@@ -1,0 +1,34 @@
+{% extends 'mini_insta/base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="post-page">
+
+  <header class="post-header">
+    <h1 class="page-title">Post</h1>
+    <p class="caption">{{ post.caption }}</p>
+    <p class="muted">
+      <time datetime="{{ post.timestamp }}"> {{ post.timestamp|date:"M j, Y • g:i a" }}</time>
+      <a class="btn" href="{% url 'show_profile' post.profile.pk %}">
+        {{ post.profile.display_name}}
+      </a>
+    </p>
+  </header>
+
+  <section class="post-photos">
+    <div class="photos-grid">
+      {% for photo in post.photo_set.all %}
+        <figure class="photo-card">
+          <img src="{{ photo.image_url }}" alt="Photo {{ forloop.counter }} for this post">
+        </figure>
+      {% empty %}
+        <div class="placeholder-card">
+          <img src="https://media.tenor.com/6ebackS1P9wAAAAe/dog-staring.png" alt="No image available">
+          <p class="muted">No photos for this post yet.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+</main>
+{% endblock %}

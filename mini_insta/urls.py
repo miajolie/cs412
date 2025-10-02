@@ -2,7 +2,7 @@
 # and the link for the image to access the individual profile 
 
 from django.urls import path 
-from .views import ProfileListView, ProfileDetailView
+from .views import ProfileListView, ProfileDetailView, PostDetailView
 
 urlpatterns=[
     
@@ -10,4 +10,5 @@ urlpatterns=[
     
     path('profile/<int:pk>', ProfileDetailView.as_view(), name='show_profile'),
 
+    path('post/<int:pk>', PostDetailView.as_view(), name="show_post"),
 ]

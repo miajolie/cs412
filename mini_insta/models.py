@@ -1,6 +1,7 @@
 # the Profile model and its attributes for an individual user
 from django.db import models
 
+
 # Create your models here.
 class Profile(models.Model):
     '''Encapsulate the data of a blog Profile by an Individual User'''
@@ -17,6 +18,13 @@ class Profile(models.Model):
         '''returns a string representation of the model instance '''
         return f'{self.username} by {self.display_name}'
     
+    def get_all_posts(self):
+        '''Return a QuerySet of posts from a profile'''
+        # object method 
+        posts = Post.objects.filter(profile = self)
+        # list method = no need for the objects method
+        post = posts.order_by("-timestamp")
+        return post
 
 class Post(models.Model):
     '''will model the data attributes of an Instagram post'''
@@ -29,6 +37,12 @@ class Post(models.Model):
     def __str__(self):
         '''returns a string representation of the model instance '''
         return f'{self.caption} belonging to {self.profile}'
+    
+    def get_all_photos(self):
+        '''Return a QuerySet of photos for a given post'''
+        return Photo.objects.filter(post = self)
+
+
 
 class Photo(models.Model):
     '''will model the data attributes of an image associated with a Post'''
@@ -38,7 +52,7 @@ class Photo(models.Model):
     image_url = models.URLField(blank=True)
     timestamp = models.DateTimeField(auto_now=True)
 
-    def __str___(self):
+    def __str__(self):
         '''return a string representation of the model instance'''
         return f'{self.image_url} belonging to {self.post}'
 
