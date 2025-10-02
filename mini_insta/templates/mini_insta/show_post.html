@@ -17,7 +17,7 @@
 
   <section class="post-photos">
     <div class="photos-grid">
-      {% for photo in post.photo_set.all %}
+      {% for photo in post.get_all_photos %}
         <figure class="photo-card">
           <img src="{{ photo.image_url }}" alt="Photo {{ forloop.counter }} for this post">
         </figure>
