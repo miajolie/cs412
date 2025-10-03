@@ -3,6 +3,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView,DetailView, CreateView
 
+from django.urls import reverse
 from .forms import CreatePostForm
 from .models import Profile, Post, Photo
 
@@ -52,20 +53,34 @@ class CreatePostView(CreateView):
         the Django database. We need to add the foreign key (of the Profile) to 
         the Comment object before saving it to the database.'''
 
-        print(form.cleaned_data)
         # retrive the pj from the url pattern
         pk = self.kwargs['pk']
         profile = Profile.objects.get(pk=pk)
         # set the fk 
         form.instance.profile = profile
-        # delegate the work to the superclass method form_valid        
-        response = super().form_valid(form)
-        image_url = form.cleaned_data.get('image_url')
 
+        post = form.save()
+        post.save()
+
+
+        # handles when the user input the image_url for the form
+        if not self.request.POST.get('image_url'):
+            return super().form_valid(form)
         
-        if image_url:
-            Photo.objects.create(post=self.object, image_url=image_url)
-         
+        # creating photo object for url input
+        photo = Photo()
+        photo.image_url = self.request.POST.get('image_url')
+        photo.post = post
+        photo.save()
+
+        # delegate the work to the superclass method form_valid 
+        response = super().form_valid(form)
 
         return response
+    
+    def get_success_url(self):
+        '''after creating a post, return to the profile page'''
+        pk = self.kwargs['pk']
+        return reverse('show_profile', kwargs={'pk': pk})
+
 
