@@ -426,21 +426,7 @@ button:focus-visible {
   font-size:.95rem;
 }
 
-/* inputs / textarea / selects */
-.post-page form input[type="text"],
-.post-page form input[type="url"],
-.post-page form input[type="email"],
-.post-page form input[type="search"],
-.post-page form input[type="password"],
-.post-page form select,
-.post-page form textarea{
-  background:#0f141a;
-  color:#e8eef2;
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:10px;
-  padding:.6rem .7rem;
-  width:100%;
-}
+
 
 .post-page form textarea{
   min-height:110px;
@@ -452,7 +438,7 @@ button:focus-visible {
   color:#9aabb9;
 }
 
-/* focus states */
+
 .post-page form input:focus,
 .post-page form select:focus,
 .post-page form textarea:focus{
@@ -460,13 +446,13 @@ button:focus-visible {
   outline-offset:2px;
 }
 
-/* help text & errors rendered by Django */
+
 .post-page form .helptext{
   color:#9aabb9;
   font-size:.9rem;
 }
 
-/* Django errorlist = <ul class="errorlist"><li>… */
+
 .post-page form ul.errorlist{
   list-style:none;
   margin:.35rem 0 0;
@@ -477,15 +463,15 @@ button:focus-visible {
   border-radius:8px;
 }
 
-/* submit + cancel spacing (your .btn already styled) */
+
 .post-page form .btn + .btn{
   margin-left:.6rem;
 }
 
-/* buttons should match .btn links */
+
 a.btn:link,
 a.btn:visited { color:#e8eef2; }  
-/* kill purple visited */
+
 
 button.btn,
 input[type="submit"].btn{
