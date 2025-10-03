@@ -17,7 +17,8 @@
       <h1 class="display-name">
         {{ profile.display_name}}
       </h1>
-        <p class="username">@{{ profile.username }}</p>
+
+        <p class="username">@{{ profile.username }}</p> 
         <p class="bio">{{ profile.bio_text}}</p>
 
         <!-- stats to be filled in future assignments -->
@@ -35,6 +36,8 @@
           <span class="stat-label">Posts</span>
         </li>
       </ul>
+       <p class="join">Member since {{ profile.join_date}}</p>
+
 
       <div class="actions">
         <a class="btn" href="{% url 'show_all_profiles' %}">← Back to all profiles</a>

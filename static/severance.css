@@ -228,6 +228,11 @@ button:focus-visible {
     margin:0 0 1rem; 
     color:#d3dee8; }
 
+.join{ 
+    margin:0 0 0.5rem; 
+    color:#9aabb986; }
+
+    
 .muted{ color:#9aabb9; }
 
 
