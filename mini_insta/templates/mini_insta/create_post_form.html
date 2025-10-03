@@ -1,0 +1,18 @@
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<main class="post-page">
+    <h1>Create a new Post for {{ profile.display_name}}</h1>
+
+    <form method="POST" action="{% url 'create_post' profile.pk %}">
+    {% csrf_token %}
+
+    {{ form.as_p }}  
+
+    <button type="submit" class="btn">Post</button>
+    <a class="btn" href="{% url 'show_profile' profile.pk %}">Cancel</a>
+    </form>
+
+</main>
+
+{% endblock %}

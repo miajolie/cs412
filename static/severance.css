@@ -283,7 +283,7 @@ button:focus-visible {
 .placeholder-card img{
     display:block;             
     width:100%;
-    aspect-ratio:1 / 1;        
+    aspect-ratio: 1 / 1;        
     object-fit:cover;
     object-position:center;
 }
@@ -365,8 +365,8 @@ button:focus-visible {
 
 .photos-grid{
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.2rem;
   margin-top: .75rem;
 }
 
@@ -387,3 +387,127 @@ button:focus-visible {
 
 .post-media{ display:block; background:#0f141a; aspect-ratio: 1 / 1; }
 .post-media img{ width:100%; height:100%; object-fit:cover; object-position:center; }
+
+/* new footer */
+.site-footer-inner{
+  width: min(1100px, 92vw);
+  margin: 0 auto;
+  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.footer-tagline{ color:#9aabb9; }
+
+/* form styling */
+
+.post-page form{
+  background:#131922;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  padding:1rem;
+  box-shadow:0 6px 20px rgba(0,0,0,.18);
+  max-width:720px;
+  margin:.75rem 0 0;
+}
+
+/* each field row is a <p> from as_p */
+.post-page form > p{
+  margin:.85rem 0;
+  display:flex;
+  flex-direction:column;
+  gap:.4rem;
+}
+
+.post-page form label{
+  color:#cfe8e1;
+  font-size:.95rem;
+}
+
+/* inputs / textarea / selects */
+.post-page form input[type="text"],
+.post-page form input[type="url"],
+.post-page form input[type="email"],
+.post-page form input[type="search"],
+.post-page form input[type="password"],
+.post-page form select,
+.post-page form textarea{
+  background:#0f141a;
+  color:#e8eef2;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:10px;
+  padding:.6rem .7rem;
+  width:100%;
+}
+
+.post-page form textarea{
+  min-height:110px;
+  resize:vertical;
+}
+
+.post-page form input::placeholder,
+.post-page form textarea::placeholder{
+  color:#9aabb9;
+}
+
+/* focus states */
+.post-page form input:focus,
+.post-page form select:focus,
+.post-page form textarea:focus{
+  outline:2px solid #cfe8e1;
+  outline-offset:2px;
+}
+
+/* help text & errors rendered by Django */
+.post-page form .helptext{
+  color:#9aabb9;
+  font-size:.9rem;
+}
+
+/* Django errorlist = <ul class="errorlist"><li>… */
+.post-page form ul.errorlist{
+  list-style:none;
+  margin:.35rem 0 0;
+  padding:.5rem .6rem;
+  border:1px solid rgba(255, 99, 71, .25);
+  background:rgba(255, 99, 71, .08);
+  color:#ffb6a0;
+  border-radius:8px;
+}
+
+/* submit + cancel spacing (your .btn already styled) */
+.post-page form .btn + .btn{
+  margin-left:.6rem;
+}
+
+/* buttons should match .btn links */
+a.btn:link,
+a.btn:visited { color:#e8eef2; }  
+/* kill purple visited */
+
+button.btn,
+input[type="submit"].btn{
+  appearance:none; -webkit-appearance:none;
+  background:transparent;                 
+  /* stop white fill */
+  font-size: 1rem;
+  font-weight: 500;    
+  color:#e8eef2;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:12px;
+  padding:.6rem .9rem;
+  cursor:pointer;
+  transition:transform .16s ease, background-color .16s ease, border-color .16s ease;
+}
+button.btn:hover,
+input[type="submit"].btn:hover,
+a.btn:hover{
+  transform:translateY(-1px);
+  background:rgba(207,232,225,.06);
+  border-color:rgba(207,232,225,.6);
+}
+
+
+

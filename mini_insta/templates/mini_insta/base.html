@@ -31,8 +31,20 @@
        
     </body>
     <footer class="site-footer">
-        <a class="footer-link"href="{% url 'show_all_profiles' %}">Back to all profiles</a>
-        The Offical Social Page for those who Praise Kier!
+        <div class="site-footer-inner">
+            <a class="footer-link" href="{% url 'show_all_profiles' %}">← Back to all profiles</a>
+
+                {# Show the Create Post button only when we know which profile to post to #}
+                {% if profile %}
+                    <a class="footer-link" href="{% url 'create_post' profile.pk %}">+ New Post</a>
+                {% elif post %}
+                    {# On a post page, derive the profile from the post #}
+                    <a class="footer-link" href="{% url 'create_post' post.profile.pk %}">+ New Post</a>
+                {% endif %}
+
+                <span class="footer-tagline">The Official Social Page for those who Praise Kier!</span>
+                
+        </div>
     </footer>
 
 </html>
