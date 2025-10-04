@@ -19,11 +19,16 @@
             </div>
             <a href="{% url 'article' article.pk %}">
                 <!-- passing primary key into the article function -->
-                <img src="{{article.image_url}}" alt="hey!">
+                <!-- <img src="{{article.image_file.url}}" alt="hey!"> -->
+                {% if article.image_file %}
+                    <img src="{{article.image_file.url}}" alt="hey!">
+                {% else %}
+                    <h3> NO IMAGE</h3>
+                {% endif %}
             </a>
         </article>
 
-        <hr>
+
     </main>
 {% endfor %}
 
