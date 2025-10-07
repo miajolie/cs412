@@ -51,9 +51,28 @@ class Photo(models.Model):
     # every Photo object is related to a single Post object
     image_url = models.URLField(blank=True)
     timestamp = models.DateTimeField(auto_now=True)
+    image_file = models.ImageField(blank=True)
+
 
     def __str__(self):
         '''return a string representation of the model instance'''
-        return f'{self.image_url} belonging to {self.post}'
+        # return f'{self.image_url} belonging to {self.post}' old method
+        if self.image_file:
+            return f'{self.image_file} belonging to {self.post}'
+        if self.image_url:
+            return f'{self.image_url} belonging to {self.post}'
+        else:
+            return "No Image"
+
+
+    
+    def get_image_url(self):
+        '''fetches the proper image, decides between url and file url'''
+        if self.image_url:
+            return self.image_url
+        elif self.image_file:
+            return self.image_file.url
+             
+        return ''
 
 

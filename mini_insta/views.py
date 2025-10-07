@@ -63,16 +63,27 @@ class CreatePostView(CreateView):
         post.save()
 
 
-        # handles when the user input the image_url for the form
-        if not self.request.POST.get('image_url'):
-            return super().form_valid(form)
+        # # handles when the user input the image_url for the form
+        # if not self.request.POST.get('image_url'):
+        #     return super().form_valid(form)
         
-        # creating photo object for url input
-        photo = Photo()
-        photo.image_url = self.request.POST.get('image_url')
-        photo.post = post
-        photo.save()
+        # # creating photo object for url input
+        # photo = Photo()
+        # photo.image_url = self.request.POST.get('image_url')
+        # photo.post = post
+        # photo.save()
 
+        # create Photo(s) objects from uploaded files 
+        # for foto in self.request.FILES.getlist('files'):
+        #     Photo.objects.create(post=self.object, image_file=foto)
+        
+        fotos = self.request.FILES.getlist('files')
+        for foto in fotos:
+            photo = Photo()
+            photo.image_file = foto
+            photo.post = post
+            photo.save()
+            
         # delegate the work to the superclass method form_valid 
         response = super().form_valid(form)
 

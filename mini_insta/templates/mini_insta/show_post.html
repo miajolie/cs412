@@ -19,7 +19,7 @@
     <div class="photos-grid">
       {% for photo in post.get_all_photos %}
         <figure class="photo-card">
-          <img src="{{ photo.image_url }}" alt="Photo {{ forloop.counter }} for this post">
+          <img src="{{ photo.get_image_url }}" alt="Photo {{ forloop.counter }} for this post">
         </figure>
       {% empty %}
         <div class="placeholder-card">

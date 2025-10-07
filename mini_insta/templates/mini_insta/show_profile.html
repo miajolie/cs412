@@ -60,7 +60,7 @@
             {% with first=post.get_all_photos.first %}
               {% if first %}
               <!-- first = photo object, so accessing that objects field! -->
-                <img src="{{ first.image_url }}" alt="Photo">
+                <img src="{{ first.get_image_url }}" alt="Photo">
               {% else %}
                 <img src="https://media.tenor.com/6ebackS1P9wAAAAe/dog-staring.png" alt="No image available">
               {% endif %}
