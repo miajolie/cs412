@@ -1,6 +1,6 @@
 # the Profile model and its attributes for an individual user
 from django.db import models
-
+from django.urls import reverse
 
 # Create your models here.
 class Profile(models.Model):
@@ -25,6 +25,10 @@ class Profile(models.Model):
         # list method = no need for the objects method
         post = posts.order_by("-timestamp")
         return post
+    
+    def get_absolute_url(self):
+        '''Return a URL to display one instance of this object'''
+        return reverse('show_profile', kwargs={'pk': self.pk})
 
 class Post(models.Model):
     '''will model the data attributes of an Instagram post'''

@@ -1,10 +1,10 @@
 # views.py file that obtains all the data for the website 
 
 from django.shortcuts import render
-from django.views.generic import ListView,DetailView, CreateView
+from django.views.generic import ListView,DetailView, CreateView, UpdateView
 
 from django.urls import reverse
-from .forms import CreatePostForm
+from .forms import CreatePostForm, UpdateProfileForm
 from .models import Profile, Post, Photo
 
 # Create your views here.
@@ -93,5 +93,13 @@ class CreatePostView(CreateView):
         '''after creating a post, return to the profile page'''
         pk = self.kwargs['pk']
         return reverse('show_profile', kwargs={'pk': pk})
+
+class UpdateProfileView(UpdateView):
+    '''A view to handle when a profile is updated'''
+    model = Profile
+    form_class = UpdateProfileForm
+    template_name = 'mini_insta/update_profile_form.html'
+
+    
 
 
