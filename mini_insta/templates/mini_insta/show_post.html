@@ -1,10 +1,13 @@
+<!-- show_post.html -->
+<!-- template that will display a post  -->
+
 {% extends 'mini_insta/base.html' %}
 {% load static %}
 
 {% block content %}
 <main class="post-page">
 
-  <header class="post-header">
+<header class="post-header">
     <h1 class="page-title">Post</h1>
     <p class="caption">{{ post.caption }}</p>
     <p class="muted">
@@ -13,6 +16,13 @@
         {{ post.profile.display_name}}
       </a>
     </p>
+    
+    <!-- New buttons for delete and update post -->
+    <div class="post-actions">
+      <a class="btn" href="{% url 'update_post' post.pk %}">Update</a>
+      <a class="btn" href="{% url 'delete_post' post.pk %}">Delete</a>
+    </div>
+
   </header>
 
   <section class="post-photos">

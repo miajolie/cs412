@@ -1,0 +1,33 @@
+<!-- delete_post_form.html -->
+<!-- form template that will alow user to delete a post-->
+
+{% extends 'mini_insta/base.html' %}
+{% block content %}
+<main class="post-page">
+    <h1 class="page-title">Delete this post?</h1>
+
+    <!-- forms for delete and cancel -->
+    <div class="action-forms">
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn">Delete</button>
+        </form>
+
+        <form method="GET" action="{{ post.profile.get_absolute_url }}">
+            <button type="submit" class="btn">Cancel</button>
+        </form>
+    </div>
+
+    <p class="muted">{{object.caption}}</p>
+
+    <div class="photos-grid">
+        {% for photo in object.photo_set.all %}
+            <figure class="photo-card"><img src="{{ photo.get_image_url }}" alt=""></figure>
+        {% empty %}
+            <div class="placeholder-card"><p>No photos.</p></div>
+        {% endfor %}
+    </div>
+        
+
+</main>
+{% endblock %}
