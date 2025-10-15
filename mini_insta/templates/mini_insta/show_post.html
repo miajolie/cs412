@@ -9,23 +9,11 @@
 
 <header class="post-header">
     <h1 class="page-title">Post</h1>
+    <!-- liking a post -->
+    <p><strong>{{ post.get_num_likes }}</strong> Likes </p>
     <p class="caption">{{ post.caption }}</p>
-    <p class="muted">
-      <time datetime="{{ post.timestamp }}"> {{ post.timestamp|date:"M j, Y • g:i a" }}</time>
-      <a class="btn" href="{% url 'show_profile' post.profile.pk %}">
-        {{ post.profile.display_name}}
-      </a>
-    </p>
-    
-    <!-- New buttons for delete and update post -->
-    <div class="post-actions">
-      <a class="btn" href="{% url 'update_post' post.pk %}">Update</a>
-      <a class="btn" href="{% url 'delete_post' post.pk %}">Delete</a>
-    </div>
-
-  </header>
-
-  <section class="post-photos">
+    <!-- Image here because makes most sense -->
+    <section class="post-photos">
     <div class="photos-grid">
       {% for photo in post.get_all_photos %}
         <figure class="photo-card">
@@ -39,6 +27,64 @@
       {% endfor %}
     </div>
   </section>
+  <!-- New buttons for delete and update post -->
+    <div class="post-actions">
+      <a class="btn" href="{% url 'update_post' post.pk %}">Update</a>
+      <a class="btn" href="{% url 'delete_post' post.pk %}">Delete</a>
+    </div>
+  <!-- profile information for post -->
+  <p class="muted">
+      <time datetime="{{ post.timestamp }}"> {{ post.timestamp|date:"M j, Y • g:i a" }}</time>
+      <a class="btn" href="{% url 'show_profile' post.profile.pk %}">
+        {{ post.profile.display_name}}
+      </a>
+    </p>
+    <!-- Comments beneath the post caption -->
+    <br>
+    <h3>Comments</h3>
+      <ul class="comments">
+        {% for c in post.get_all_comments %}
+          <li class="comment">
+            <div class="comment-header">
+              <a class="comment-author" href="{% url 'show_profile' c.profile.pk %}">
+                {{ c.profile.display_name|default:c.profile.username }}
+              </a>
+              <time class="comment-time" datetime="{{ c.timestamp|date:'c' }}">
+                • {{ c.timestamp|date:"M j, Y • g:i a" }}
+              </time>
+            </div>
+            <p class="comment-text">{{ c.text }}</p>
+          </li>
+        {% empty %}
+          <li class="comment empty">No comments yet.</li>
+        {% endfor %}
+      </ul>
+
+    <!-- <p class="muted">
+      <time datetime="{{ post.timestamp }}"> {{ post.timestamp|date:"M j, Y • g:i a" }}</time>
+      <a class="btn" href="{% url 'show_profile' post.profile.pk %}">
+        {{ post.profile.display_name}}
+      </a>
+    </p> -->
+    
+    
+
+  </header>
+
+  <!-- <section class="post-photos">
+    <div class="photos-grid">
+      {% for photo in post.get_all_photos %}
+        <figure class="photo-card">
+          <img src="{{ photo.get_image_url }}" alt="Photo {{ forloop.counter }} for this post">
+        </figure>
+      {% empty %}
+        <div class="placeholder-card">
+          <img src="https://media.tenor.com/6ebackS1P9wAAAAe/dog-staring.png" alt="No image available">
+          <p class="muted">No photos for this post yet.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </section> -->
 
 </main>
 {% endblock %}

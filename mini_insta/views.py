@@ -140,4 +140,15 @@ class UpdatePostView(UpdateView):
         pk = self.kwargs['pk']
         return reverse('show_post', kwargs={'pk': pk})
 
+class ShowFollowersDetailView(DetailView):
+    '''provides the context variable profile to their templates'''
+    model = Profile
+    template_name = 'mini_insta/show_followers.html'
+    context_object_name = 'profile'
 
+class ShowFollowingDetailView(DetailView):
+    '''provides the context variable profile to their templates'''
+    
+    model = Profile
+    template_name = 'mini_insta/show_following.html'
+    context_object_name = 'profile'

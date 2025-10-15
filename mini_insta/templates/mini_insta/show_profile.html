@@ -25,12 +25,16 @@
         <!-- stats to be filled in future assignments -->
       <ul class="stats">
         <li>
-          <span class="stat-number">TBD</span>
-          <span class="stat-label">Followers</span>
+          <a href="{% url 'show_followers' profile.pk %}">
+            <span class="stat-number">{{profile.get_num_followers}}</span>
+            <span class="stat-label">Followers</span>
+          </a>
         </li>
         <li>
-          <span class="stat-number">TBD</span>
-          <span class="stat-label">Following</span>
+          <a href="{% url 'show_following' profile.pk %}">
+            <span class="stat-number">{{profile.get_num_following}}</span>
+            <span class="stat-label">Following</span>
+          </a>
         </li>
         <li>
           <span class="stat-number">{{profile.get_all_posts.count}}</span>
