@@ -169,3 +169,43 @@ class PostFeedListView(ListView):
         context = super().get_context_data(**kwargs)
         context['profile'] = self.profile
         return context
+    
+class SearchView(ListView):
+    '''searches profiles and posts'''
+    template_name = 'mini_insta/search_results.html'
+    context_object_name = 'posts'
+
+    def dispatch(self, request, *args, **kwargs):
+        '''used to dispatch/handle any request'''
+
+        self.profile = Profile.objects.get(pk=self.kwargs['pk'])
+        q = self.request.GET.get('query', '').strip()
+        if not q:
+            return render(request, 'mini_insta/search.html', {'profile': self.profile})
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_queryset(self):
+        '''method to obtain the QuesrySet of instance data'''
+        q = self.request.GET.get('query', '').strip()
+        if not q:
+            return Post.objects.none()
+        return Post.objects.filter(caption__icontains=q).order_by('-timestamp')
+    
+    def get_context_data(self, **kwargs):
+        '''return the dictionary of context data that can be accessed from the template'''
+        ctx = super().get_context_data(**kwargs)
+
+        q = self.request.GET.get('query', '').strip()   
+        if q:
+            profiles = (
+                Profile.objects.filter(username__icontains=q) |
+                Profile.objects.filter(display_name__icontains=q) |
+                Profile.objects.filter(bio_text__icontains=q)
+            ).distinct().order_by('username')
+        else:
+            profiles = Profile.objects.none()
+
+        ctx['profile'] = self.profile          
+        ctx['query'] = q
+        ctx['profiles'] = profiles
+        return ctx

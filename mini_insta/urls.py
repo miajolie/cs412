@@ -2,7 +2,9 @@
 # and the link for the image to access the individual profile 
 
 from django.urls import path 
-from .views import ProfileListView, ProfileDetailView, PostDetailView, CreatePostView, UpdateProfileView, DeletePostView, UpdatePostView, ShowFollowersDetailView, ShowFollowingDetailView, PostFeedListView
+from .views import (ProfileListView, ProfileDetailView, PostDetailView, CreatePostView,
+                     UpdateProfileView, DeletePostView, UpdatePostView, ShowFollowersDetailView, 
+                     ShowFollowingDetailView, PostFeedListView, SearchView)
 
 urlpatterns=[
     
@@ -25,6 +27,8 @@ urlpatterns=[
     path('profile/<int:pk>/following', ShowFollowingDetailView.as_view(), name='show_following'),
 
     path('profile/<int:pk>/feed', PostFeedListView.as_view(), name='show_feed'),
+
+    path('profile/<int:pk>/search', SearchView.as_view(), name='search'),
     
     
 ]

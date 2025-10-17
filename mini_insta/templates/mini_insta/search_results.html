@@ -1,0 +1,44 @@
+{% extends 'mini_insta/base.html' %}
+{% block content %}
+<main class="search-page">
+  <h1 class="page-title">Search</h1>
+
+  <form class="search-form" action="{% url 'search' profile.pk %}" method="get">
+    <input class="search-input" type="text" name="query" value="{{ query }}"
+           placeholder="Search profiles and posts…" required>
+    <button class="search-btn" type="submit">Search</button>
+  </form>
+
+  <section class="search-results">
+    <h2>Profiles</h2>
+    <ul class="result-list">
+      {% for p in profiles %}
+        <li class="result-card">
+          <a class="result-main" href="{% url 'show_profile' p.pk %}">
+            <div class="result-title">
+              {{ p.display_name}}
+            </div>
+            <div class="result-sub">@{{ p.username }}</div>
+          </a>
+        </li>
+      {% empty %}
+        <li class="muted">No matching profiles.</li>
+      {% endfor %}
+    </ul>
+
+    <h2>Posts</h2>
+    <ul class="result-list">
+      {% for post in posts %}
+        <li class="result-card">
+          <a class="result-main" href="{% url 'show_post' post.pk %}">
+            <div class="result-title">{{ post.caption|default:"(no caption)" }}</div>
+            <div class="result-sub">by {{ post.profile.display_name}}</div>
+          </a>
+        </li>
+      {% empty %}
+        <li class="muted">No matching posts.</li>
+      {% endfor %}
+    </ul>
+  </section>
+</main>
+{% endblock %}
