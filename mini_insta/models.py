@@ -32,7 +32,7 @@ class Profile(models.Model):
     
     def get_followers(self):
         '''returns a ilst of Profiles who follow this profile'''
-        query = Follow.objects.filter(profile=self).select_related('follower_profile')
+        query = Follow.objects.filter(profile=self)
         # selects those connected by an edge / connected to one another 
         return [f.follower_profile for f in query]
     
@@ -43,12 +43,18 @@ class Profile(models.Model):
     def get_following(self):
         '''return list of profiles this profile follows'''
 
-        query = Follow.objects.filter(follower_profile=self).select_related('profile')
+        # query = Follow.objects.filter(follower_profile=self).select_related('profile')
+        query = Follow.objects.filter(follower_profile=self)
         return [f.profile for f in query]
     
     def get_num_following(self):
         '''return count of how many profiles are being follwed'''
         return Follow.objects.filter(follower_profile=self).count()
+    
+    def get_post_feed(self):
+        '''returns a queryset of posts'''
+        following = self.get_following()
+        return Post.objects.filter(profile__in = following).order_by('-timestamp')
 
 class Post(models.Model):
     '''will model the data attributes of an Instagram post'''

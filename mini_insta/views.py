@@ -112,8 +112,6 @@ class DeletePostView(DeleteView):
         # calling the superclass method 
         context = super().get_context_data(**kwargs)
         
-
-
         # setting the context variables 
         context['post'] = self.object
         context['profile'] = self.object.profile
@@ -141,14 +139,33 @@ class UpdatePostView(UpdateView):
         return reverse('show_post', kwargs={'pk': pk})
 
 class ShowFollowersDetailView(DetailView):
-    '''provides the context variable profile to their templates'''
+    '''provides the context variable profile to their templates to show followers'''
     model = Profile
     template_name = 'mini_insta/show_followers.html'
     context_object_name = 'profile'
 
 class ShowFollowingDetailView(DetailView):
-    '''provides the context variable profile to their templates'''
+    '''provides the context variable profile to their templates to show following'''
     
     model = Profile
     template_name = 'mini_insta/show_following.html'
     context_object_name = 'profile'
+
+class PostFeedListView(ListView):
+    '''provides context variable to show the Post Feed as a List View'''
+
+    model = Post
+    template_name = 'mini_insta/show_feed.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        '''helper method to retrieve the post feed using the method from profile'''
+        pk = self.kwargs['pk']
+        self.profile = Profile.objects.get(pk=pk)
+        return self.profile.get_post_feed()
+
+    def get_context_data(self, **kwargs):
+        '''return the dictionary of context variable for the data in the template'''
+        context = super().get_context_data(**kwargs)
+        context['profile'] = self.profile
+        return context

@@ -321,6 +321,7 @@ button:focus-visible {
 }
 
 /* === new css for singular posts */
+/* === PROFILE PAGE: posts grid (square thumbnails, cropped to fill) === */
 .posts-grid{
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -328,7 +329,7 @@ button:focus-visible {
   margin-top: .75rem;
 }
 
-.post-card{
+.posts-grid .post-card{
   background: #131922;
   border: 1px solid rgba(255,255,255,.08);
   border-radius: 14px;
@@ -336,77 +337,39 @@ button:focus-visible {
   box-shadow: 0 6px 20px rgba(0,0,0,.18);
   transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
-.post-card:hover{
+.posts-grid .post-card:hover{
   transform: translateY(-3px);
   border-color: rgba(207,232,225,.25);
   box-shadow: 0 10px 26px rgba(0,0,0,.24);
 }
 
-.post-media{
+.posts-grid .post-card .post-media{
   background: #0f141a;
-  aspect-ratio: 1 / 1;         
-  /* square window for uniform thumbs */
+  aspect-ratio: 1 / 1;    /* square tiles */
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
 }
-.post-media img{
+
+.posts-grid .post-card .post-media img{
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: cover;             
-  /* crop uniformly */
-  object-position: center;       
-  /* center subjects */
+  object-fit: cover;       /* fill the square; crop edges */
+  object-position: center;
 }
 
-.post-meta{
-  padding: .7rem .8rem;
-}
-.post-meta .caption{
+.posts-grid .post-meta{ padding: .7rem .8rem; }
+.posts-grid .post-meta .caption{
   margin: 0 0 .35rem;
   color: #e8eef2;
-  display: -webkit-box;          
+  display: -webkit-box;
 
-  line-clamp: 2;
-  box-orient: vertical;
+  -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.post-meta time{
-  color: #9aabb9;
-  font-size: .9rem;
-}
 
-/* posts page */
-.post-page { width: min(1100px, 92vw); margin: 1.2rem auto 3rem; }
 
-.post-header .caption {
-  font-size: 1.05rem;
-  color: #e8eef2;
-  margin: 0 0 .25rem;
-}
-
-.photos-grid{
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 1.2rem;
-  margin-top: .75rem;
-}
-
-.photo-card{
-  background: #131922;
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 6px 20px rgba(0,0,0,.18);
-}
-
-.photo-card img{
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.post-media{ display:block; background:#0f141a; aspect-ratio: 1 / 1; }
-.post-media img{ width:100%; height:100%; object-fit:cover; object-position:center; }
 
 /* new footer */
 .site-footer-inner{
@@ -670,6 +633,99 @@ a.btn:hover{
   border: 1px solid rgba(255,255,255,.08);
 }
 
+/* === FEED ONLY: letterboxed media (show entire image, fixed frame) === */
+/* Center the H1, keep the Back button on the left */
+.feed-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; 
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.feed-header .btn {
+  grid-column: 1;           
+  justify-self: start;
+}
+
+.feed-header h1 {
+  grid-column: 2;           
+  justify-self: center;
+  text-align: center;
+  margin: 0;
+}
+
+
+.feed-wrap{
+  --feed-width: 680px;
+  max-width: var(--feed-width);
+  margin: 0 auto;
+  padding: 0 12px;
+}
+
+.feed-wrap .post-card{
+  margin: 16px 0;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.07);
+}
+
+.feed-wrap .post-card .post-media{
+  --media-ratio: 16 / 9;     /* change to 1/1 or 4/5 if you prefer */
+  aspect-ratio: var(--media-ratio);
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+
+  /* center image inside the fixed frame (letterbox) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255,255,255,.06); /* the bars */
+}
+
+.feed-wrap .post-card .post-media img{
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;       /* show entire image (no crop) */
+  display: block;
+}
+
+/* FEED ONLY: make the light gray media box smaller inside the card */
+.feed-wrap .post-card {
+  --media-inset-x: 20px;   /* left/right inset */
+  --media-inset-y: 14px;   /* top/bottom inset */
+}
+
+.feed-wrap .post-card .post-media {
+  width: 92%; 
+  margin: 10px auto;
+}
+
+
+.feed-wrap .post-meta{
+  display: flex;
+  gap: .5rem;
+  align-items: baseline;
+  margin-bottom: .6rem;
+}
+.feed-wrap .post-meta a,
+.feed-wrap .post-meta a:visited{ color: inherit; text-decoration: none; }
+.feed-wrap .post-meta a:hover{ opacity: .9; }
+.feed-wrap .likes{ margin: .6rem 0 .25rem; }
+.feed-wrap .caption{ margin: 0 0 .5rem; }
+
+@media (max-width: 520px){
+  .feed-wrap{ --feed-width: 100%; }
+  .feed-wrap .post-card{ margin: 12px 0; padding: 10px; }
+  .feed-wrap .post-card .post-media{ border-radius: 12px; }
+}
+
+
 .comment-header {
   display: flex;
   align-items: baseline;
@@ -712,3 +768,74 @@ a.btn:hover{
 @media (max-width: 520px) {
   .comment { padding: .65rem .8rem; }
 }
+
+/* SINGLE POST PAGE — smaller media, centered, no cropping */
+.post-page .photos-grid {
+
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: 12px;
+}
+
+.post-page .photo-card {
+  width: min(780px, 100%);   
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255,255,255,.06);  
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 0;                
+}
+
+.post-page .photo-card img {
+  display: block;
+  max-width: 100%;
+  max-height: 480px;     
+  width: auto;
+  height: auto;
+  object-fit: contain;      
+  margin: 0 auto;
+}
+
+/* Optional: narrow the whole content column a bit */
+.post-page { width: min(900px, 92vw); }
+
+/* SINGLE POST PAGE — photos + placeholder sized nicely */
+.post-page .photos-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: 12px;
+}
+
+.post-page .photo-card,
+.post-page .placeholder-card {
+  width: min(780px, 100%);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 0;
+}
+
+.post-page .photo-card img,
+.post-page .placeholder-card img {
+  display: block;
+  max-width: 100%;
+  max-height: 480px;    
+  width: auto;
+  height: auto;
+  object-fit: contain; 
+  margin: 0 auto;
+}
+
+.post-page .placeholder-card p {
+  margin: .65rem .8rem 1rem;
+  text-align: center;
+  color: #9aabb9;
+}
+
+
+.post-page { width: min(900px, 92vw); }
+
+
