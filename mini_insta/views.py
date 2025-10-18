@@ -193,7 +193,7 @@ class SearchView(ListView):
     
     def get_context_data(self, **kwargs):
         '''return the dictionary of context data that can be accessed from the template'''
-        ctx = super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         q = self.request.GET.get('query', '').strip()   
         if q:
@@ -205,7 +205,7 @@ class SearchView(ListView):
         else:
             profiles = Profile.objects.none()
 
-        ctx['profile'] = self.profile          
-        ctx['query'] = q
-        ctx['profiles'] = profiles
-        return ctx
+        context['profile'] = self.profile          
+        context['query'] = q
+        context['profiles'] = profiles
+        return context
