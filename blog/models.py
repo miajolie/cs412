@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 
+from django.contrib.auth.models import User 
+
 # Create your models here.
 class Article(models.Model):
     '''Encapsulate the data of a blog Article by an Author'''
@@ -13,6 +15,8 @@ class Article(models.Model):
     # image_url = models.URLField(blank=True). URL AS A STRING
 
     image_file = models.ImageField(blank=True)
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE) ## NEW
 
     def __str__(self):
         '''returns a string representation of the model instance '''
