@@ -6,6 +6,8 @@ from .views import (ProfileListView, ProfileDetailView, PostDetailView, CreatePo
                      UpdateProfileView, DeletePostView, UpdatePostView, ShowFollowersDetailView, 
                      ShowFollowingDetailView, PostFeedListView, SearchView, MyProfileDetailView)
 from django.contrib.auth import views as auth_views
+from django.views.generic import TemplateView
+
 
 urlpatterns=[
     
@@ -34,10 +36,12 @@ urlpatterns=[
      # authentication views
     path('login/', auth_views.LoginView.as_view(template_name='mini_insta/login.html'), name='login'), ## NEW
 
-    # template specific to my webapp application
-	path('logout/', auth_views.LogoutView.as_view(next_page='show_all_profiles'), name='logout'), ## NEW
+    path('logout/', auth_views.LogoutView.as_view(next_page='logout_confirmation'), name='logout'),
+
+    path('logged-out/', TemplateView.as_view(template_name='mini_insta/logged_out.html'), name='logout_confirmation'),
 
     path('profile', MyProfileDetailView.as_view(), name="my_profile"),
-    
+
+
     
 ]

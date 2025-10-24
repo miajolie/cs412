@@ -4,7 +4,7 @@
 # general view allows general view formats that handle common instances  
 
 from django.shortcuts import render
-from django.views.generic import ListView,DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView,DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
 from django.urls import reverse
 from .forms import CreatePostForm, UpdateProfileForm, UpdatePostForm
@@ -237,3 +237,9 @@ class MyProfileDetailView(ProfileRequiredMixin, DetailView):
     def get_object(self):
         """Return the logged-in user's own Profile."""
         return Profile.objects.get(user=self.request.user)
+    
+class LogoutView(TemplateView):
+    '''logout view'''
+    template_name = 'mini_insta/logged_out.html'
+    
+
