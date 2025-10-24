@@ -1,0 +1,26 @@
+<!-- update_profile_form.html -->
+<!-- form template that will alow user to update the profile -->
+<!-- Edit the Display Name, Bio Text, and Profile Image URL -->
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+    <main class="post-page">
+        <h1 class="page-title">Create Your Profile</h1>
+        
+        <form method="POST" action="" class="form-card simple-form">
+            {% csrf_token %}
+
+            <h2>Account Info</h2>
+            {{ user_form.as_p }}
+
+            <h2>Profile Info</h2>
+            {{ form.as_p }}
+        
+        <div class="actions">
+            <button type="submit" class="btn">Save</button>
+            <a class="btn" href="{% url 'show_all_profiles' %}">Cancel</a>
+        </div>
+        
+        </form>
+</main>
+{% endblock %}

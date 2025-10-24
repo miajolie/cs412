@@ -1,0 +1,51 @@
+<!-- show_fed.html -->
+<!-- shows feed from who the person is following -->
+
+{% extends 'mini_insta/base.html' %}
+{% block content %}
+<header class="feed-header">
+  <a class="btn" href="{% url 'show_profile' profile.pk %}">Back to Profile</a>
+  <h1>Home Feed</h1>
+</header>
+
+<section class="feed-wrap">
+  {% for post in posts %}
+    <article class="post-card">
+      <header class="post-meta">
+        <a href="{% url 'show_profile' post.profile.pk %}">
+          {{ post.profile.display_name}}
+        </a>
+        <span class="muted">• {{ post.timestamp|date:"M j, Y • g:i a" }}</span>
+      </header>
+
+      {% with first=post.get_all_photos.first %}
+        <div class="post-media">
+          {% if first %}
+            <img src="{{ first.get_image_url }}" alt="post image" loading="lazy">
+          {% else %}
+            <img src="https://media.tenor.com/6ebackS1P9wAAAAe/dog-staring.png" alt="No image available" loading="lazy">
+          {% endif %}
+        </div>
+      {% endwith %}
+
+      <p class="likes"><strong>{{ post.get_num_likes }}</strong> Likes</p>
+      <p class="caption">{{ post.caption }}</p>
+
+      <section class="comments">
+        <h3>Comments</h3>
+        {% for c in post.get_all_comments %}
+          <p>
+            <a class="user-name" href="{% url 'show_profile' c.profile.pk %}"">
+              {{ c.profile.display_name}}
+            </a>: {{ c.text }}
+          </p>
+        {% empty %}
+          <p class="muted">Be the first to comment.</p>
+        {% endfor %}
+      </section>
+    </article>
+  {% empty %}
+    <p class="muted">Your feed is empty. Follow some profiles!</p>
+  {% endfor %}
+</section>
+{% endblock %}

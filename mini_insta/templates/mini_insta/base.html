@@ -1,0 +1,72 @@
+<!-- base html to wrap the whole insta page + footer -->
+
+{%load static%}
+
+
+<html>
+    <head>
+        <title>Mini Insta</title>
+        <link rel="stylesheet" href="{% static 'severance.css'%}">
+    </head>
+
+    <body>
+        <header class="site-header">
+            <div class="site-header-inner">
+                <h1 class="site-title">Lumon Insta</h1>
+            <nav>
+                <ul>
+                    <li><a href = "{% url 'show_all_profiles'%}">Show All</a></li>
+
+                    <!-- URLs for logged in users only -->
+                    {% if request.user.is_authenticated %} 
+                        <li><a href = "{% url 'my_profile' %}">My Profile</a></li>     
+                        <form action="{% url 'logout' %}" method="POST">
+                            {% csrf_token%}
+                            <li><input class='btn' type="submit" value="Logout"></li>
+                        </form>
+                    {%else%}
+                        <li><a href="{% url 'login' %}">Log in</a></li>
+                        <a href="{% url 'create_profile' %}">Create Profile</a>
+                    {% endif %}
+                </ul>
+            </nav>
+            </div>
+            
+        </header>
+ 
+        {% if request.user.is_authenticated %}
+                Logged in user: {{ request.user }}.
+        {% else %}
+            Not logged in.
+        {% endif %} 
+ 
+       <!-- substitute in the specific content here-->
+        <main>
+        {%block content%}
+        {% endblock%}
+        </main>
+       
+    </body>
+
+
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <a class="footer-link" href="{% url 'show_all_profiles' %}">← Back to all profiles</a>
+
+            {# Show the Create Post button only when we know which profile to post to #}
+            {% if request.user.is_authenticated and profile.user_id == request.user.id %}
+                <a class="footer-link" href="{% url 'create_post'%}">+ New Post</a>
+                <a class="footer-link" href="{% url 'show_feed' %}">My Feed</a>
+                <a class="footer-link" href="{% url 'search' %}">Search</a>
+            {% elif post and request.user.is_authenticated and profile.user_id == request.user.id%}
+                {# On a post page, derive the profile from the post #}
+                <a class="footer-link" href="{% url 'create_post' %}">+ New Post</a>
+            {% endif %}
+
+            <span class="footer-tagline">The Official Social Page for those who Praise Kier!</span>
+                
+        </div>
+    </footer>
+
+</html>

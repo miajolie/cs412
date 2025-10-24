@@ -1,0 +1,16 @@
+{% extends "mini_insta/base.html" %}
+{% block content %}
+  <main class="center">
+    <h1>You’ve been logged out</h1>
+    <p class="muted">Thanks for visiting Mini Insta.</p>
+
+    <p>
+      <a class="btn" href="{% url 'login' %}">
+        Log in again
+      </a>
+      <a class="btn btn-ghost" href="{% url 'show_all_profiles' %}">
+        Browse profiles
+      </a>
+    </p>
+  </main>
+{% endblock %}

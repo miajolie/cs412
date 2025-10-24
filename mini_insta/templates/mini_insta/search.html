@@ -1,0 +1,15 @@
+<!-- search.html -->
+<!-- takes in a query from user to get funnel into search results -->
+
+{% extends 'mini_insta/base.html' %}
+{% block content %}
+<main class="search-page">
+  <h1 class="page-title">Search</h1>
+
+  <form class="search-form" action="{% url 'search' %}" method="get">
+    <input class="search-input" type="text" name="query"
+           placeholder="Search profiles and posts…" required>
+    <button class="search-btn" type="submit">Search</button>
+  </form>
+</main>
+{% endblock %}
