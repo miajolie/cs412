@@ -1,0 +1,19 @@
+{% extends 'quotes/base.html' %}
+<!-- loads function called static -->
+
+{% block content %}
+    <div class="card">
+        <h1>Welcome!</h1>
+            <p>
+                Welcome to the Quote of the Day application for {{person}}!
+            </p>
+            <p>
+                {{note}}
+            </p>
+            <p>
+                {{bio}}
+            </p>
+
+    </div>
+
+{% endblock %}
