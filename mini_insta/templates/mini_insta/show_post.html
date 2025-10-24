@@ -12,6 +12,27 @@
     <!-- liking a post -->
     <p>Liked by <strong>{{ post.get_num_likes }}</strong> others</p>
     <p class="caption">{{ post.caption }}</p>
+
+    <!-- like stuff -->
+    <div class="like-bar">
+      {% if request.user.is_authenticated and not is_owner %}
+        {% if has_liked %}
+          <form class="like-form" method="post" action="{% url 'unlike_post' post.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-unlike">Unlike</button>
+          </form>
+        {% else %}
+          <form class="like-form" method="post" action="{% url 'like_post' post.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-like">Like</button>
+          </form>
+        {% endif %}
+      {% endif %}
+  </div>
+
+  </div>
+</article>
+
     <!-- Image here because makes most sense -->
     <section class="post-photos">
     <div class="photos-grid">

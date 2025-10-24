@@ -51,10 +51,23 @@
       <div class="actions">
         <a class="btn" href="{% url 'show_all_profiles' %}">← Back to all profiles</a>
 
-        {% if request.user.is_authenticated and profile.user_id == request.user.id %}
-          <a class="btn" href="{% url 'update_profile' %}">Edit Profile</a>
+        {% if request.user.is_authenticated %}
+          {% if is_owner %}
+            <a class="btn" href="{% url 'update_profile' %}">Edit Profile</a>
+          {% else %}
+            {% if is_following %}
+              <form method="post" action="{% url 'unfollow_profile' profile.pk %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-unfollow">Unfollow</button>
+              </form>
+            {% else %}
+              <form method="post" action="{% url 'follow_profile' profile.pk %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-follow">Follow</button>
+              </form>
+            {% endif %}
+          {% endif %}
         {% endif %}
-  
       </div>
     </div>
   </section>

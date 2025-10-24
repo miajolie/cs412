@@ -3,12 +3,13 @@
 # views.py file that obtains all the data for the website
 # general view allows general view formats that handle common instances  
 
-from django.shortcuts import render
-from django.views.generic import ListView,DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from django.shortcuts import render, redirect
+from django.views.generic import ListView,DetailView, CreateView, UpdateView, DeleteView, View, TemplateView
+
 
 from django.urls import reverse
 from .forms import CreatePostForm, UpdateProfileForm, UpdatePostForm, CreateProfileForm
-from .models import Profile, Post, Photo
+from .models import Profile, Post, Photo, Follow, Like
 
 from django.contrib.auth.mixins import LoginRequiredMixin ## NEW for auth
 from django.contrib.auth.forms import UserCreationForm
@@ -27,6 +28,17 @@ class ProfileRequiredMixin(LoginRequiredMixin):
     def get_current_profile(self):
         return Profile.objects.get(user=self.request.user)
 
+    def has_liked_post(self, post):
+        """Return True if the logged-in user has liked the given post."""
+        mine = self.get_current_profile()
+        return Like.objects.filter(profile=mine, post=post).exists()
+
+    def is_following_profile(self, other):
+        """Return True if the logged-in user follows the given profile."""
+        mine = self.get_current_profile()
+        return Follow.objects.filter(profile=mine, follower_profile=other).exists()
+
+
 class ProfileListView(ListView):
     '''Define a view class to obtain data for all Profile records'''
     # all instances that exist in the model, doesnt care about the pk 
@@ -35,20 +47,42 @@ class ProfileListView(ListView):
     template_name = "mini_insta/show_all_profiles.html"
     context_object_name = "profiles"
 
-class ProfileDetailView(DetailView):
+class ProfileDetailView(ProfileRequiredMixin, DetailView):
     '''display a single profile'''
 
     model = Profile
     template_name = "mini_insta/show_profile.html"
     context_object_name = "profile"
 
-class PostDetailView(DetailView):
+    def get_context_data(self, **kwargs):
+        '''logic to ensure following can only happen once, and vise versa'''
+
+        context = super().get_context_data(**kwargs)
+
+        other = self.get_object()
+        mine = self.get_current_profile()
+        context['is_owner'] = (other == mine)
+        context['is_following'] = Follow.objects.filter(profile=mine, follower_profile=other).exists()
+
+        return context
+
+class PostDetailView(ProfileRequiredMixin, DetailView):
     '''displays a single post'''
     # detail view looks for a primary key
     # new instances of the model = CreateView  
     model = Post
     template_name = "mini_insta/show_post.html"
     context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        '''logic to ensure liking can only happen once, and vise versa'''
+
+        context = super().get_context_data(**kwargs)
+        post = self.get_object()
+        mine = self.get_current_profile()
+        context['has_liked'] = Like.objects.filter(profile=mine, post=post).exists()
+        context['is_owner'] = post.profile == mine
+        return context
 
 class CreatePostView(ProfileRequiredMixin, CreateView):
     '''A view to handle creation of a new Post
@@ -242,6 +276,16 @@ class MyProfileDetailView(ProfileRequiredMixin, DetailView):
         """Return the logged-in user's own Profile."""
         return Profile.objects.get(user=self.request.user)
     
+    def get_context_data(self, **kwargs):
+        '''logic to ensure following can only happen once, and vise versa'''
+
+        context = super().get_context_data(**kwargs)
+        context['is_owner'] = True
+        context['is_following'] = False
+        return context
+    
+    
+    
 class LogoutView(TemplateView):
     '''logout view'''
     template_name = 'mini_insta/logged_out.html'
@@ -280,3 +324,92 @@ class CreateProfileView(CreateView):
     def get_success_url(self):
         """After creating a Profile, go to their profile page."""
         return reverse('my_profile')
+    
+class FollowProfileView(ProfileRequiredMixin, View):
+    '''view that allows for profile to follow other profile'''
+
+    template_name = 'mini_insta/show_profile.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        mine = self.get_current_profile()
+        other = Profile.objects.get(pk=self.kwargs['pk'])
+
+        # create follow
+        Follow.objects.create(profile=mine, follower_profile=other)
+
+        # show updated profile page
+        context = {
+            'profile': other,
+        }
+
+
+        pk = self.kwargs['pk']
+
+        return redirect('show_profile', pk = pk)
+    
+    # def get_success_url(self):
+    #     """After following, go to their profile page."""
+    #     pk = self.kwargs['pk']
+    #     return reverse('show_profile', kwargs={'pk': pk})
+    
+
+
+class UnfollowProfileView(ProfileRequiredMixin, View):
+    '''view that allows for profile to unfollow other profile'''
+    template_name = 'mini_insta/show_profile.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        mine = self.get_current_profile()
+        other = Profile.objects.get(pk=self.kwargs['pk'])
+
+        Follow.objects.filter(profile=mine, follower_profile=other).delete()
+
+        context = {
+            'profile': other,
+        }
+
+
+        pk = self.kwargs['pk']
+
+        return redirect('show_profile', pk = pk)
+    
+
+class LikePostView(ProfileRequiredMixin, View):
+    '''view that allows for profile to like other profile'''
+
+    template_name = 'mini_insta/show_post.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        mine = self.get_current_profile()
+        post = Post.objects.get(pk=self.kwargs['pk'])
+
+
+        Like.objects.create(profile=mine, post=post)
+
+        context = {
+            'post': post, 
+                   }
+        
+        pk = self.kwargs['pk']
+        
+        return redirect('show_post', pk = pk)
+
+
+class UnlikePostView(ProfileRequiredMixin, View):
+    '''view that allows for profile to unlike other profile'''
+
+    template_name = 'mini_insta/show_post.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        mine = self.get_current_profile()
+        post = Post.objects.get(pk=self.kwargs['pk'])
+
+        Like.objects.filter(profile=mine, post=post).delete()
+        
+        context = {
+            'post': post, 
+                   }
+        
+
+        pk = self.kwargs['pk']
+        return redirect('show_post', pk = pk)

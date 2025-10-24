@@ -5,7 +5,7 @@ from django.urls import path
 from .views import (ProfileListView, ProfileDetailView, PostDetailView, CreatePostView,
                      UpdateProfileView, DeletePostView, UpdatePostView, ShowFollowersDetailView, 
                      ShowFollowingDetailView, PostFeedListView, SearchView, MyProfileDetailView,
-                     CreateProfileView)
+                     CreateProfileView, FollowProfileView, UnfollowProfileView, LikePostView, UnlikePostView)
 from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
 
@@ -46,5 +46,9 @@ urlpatterns=[
     path('create_profile/', CreateProfileView.as_view(), name='create_profile'),
 
 
-    
+    path('profile/<int:pk>/follow/', FollowProfileView.as_view(), name='follow_profile'),
+    path('profile/<int:pk>/delete_follow/', UnfollowProfileView.as_view(), name='unfollow_profile'),
+
+    path('post/<int:pk>/like/', LikePostView.as_view(), name='like_post'),
+    path('post/<int:pk>/delete_like/', UnlikePostView.as_view(), name='unlike_post'),
 ]

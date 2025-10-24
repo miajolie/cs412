@@ -918,3 +918,21 @@ a.btn:hover{
   border-radius: 8px;
   margin-bottom: 1rem;
 }
+
+/* lay out the area */
+.like-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* remove the global form box styles just for these forms */
+.like-bar .like-form {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: inline;      /* or inline-block */
+  width: auto;
+}
