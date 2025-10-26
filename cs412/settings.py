@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     "formdata",
     "restaurant",
     "blog",
-    "mini_insta"
+    "mini_insta",
+    "marathon_analytics",
 ]
 
 MIDDLEWARE = [
