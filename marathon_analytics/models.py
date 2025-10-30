@@ -64,7 +64,8 @@ def load_data():
        
         try:
             # create a new instance of Result object with this record from CSV
-            result = Result(bib=fields[0],
+            result = Result(
+                            bib=fields[0],
                             first_name=fields[1],
                             last_name=fields[2],
                             ctz = fields[3],
