@@ -1,3 +1,7 @@
+# urls.py
+# author: Mia Batista 
+# all the urls for the voter site, how they all link
+
 from django.urls import path 
 from . import views 
 

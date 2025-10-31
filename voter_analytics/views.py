@@ -1,4 +1,6 @@
 # voter_analytics/views.py
+# author: Mia Batista 
+# displays all the views for the voter site
 
 
 from django.shortcuts import render

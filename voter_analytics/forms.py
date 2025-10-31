@@ -1,3 +1,8 @@
+# forms.py
+# author: Mia Batista 
+# the form in order to filter certain fields, creates drop down or checkbox
+
+
 from django import forms
 from .models import *
 from datetime import date
