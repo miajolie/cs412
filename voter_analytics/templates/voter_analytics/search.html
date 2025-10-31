@@ -1,0 +1,27 @@
+<!-- Mia Batista -->
+<!-- voter_analytics/templates/voter_analytics/search.html -->
+
+{% block content %}
+<h1>Search Form</h1>
+ 
+<table>
+<form method='get' class="search-form" action="{% url 'voter' %}">
+
+    <div>{{ form.party.label_tag }} {{ form.party }}</div>
+    <div>{{ form.min_birth_year.label_tag }} {{ form.min_birth_year }}</div>
+    <div>{{ form.max_birth_year.label_tag }} {{ form.max_birth_year }}</div>
+    <div>{{ form.voter_score.label_tag }} {{ form.voter_score }}</div>
+
+  <div class="checks">
+    <label>{{ form.v20state }} 20 State</label>
+    <label>{{ form.v21town }} 21 Town</label>
+    <label>{{ form.v21primary }} 21 Primary</label>
+    <label>{{ form.v22general }} 22 General</label>
+    <label>{{ form.v23town }} 23 Town</label>
+        
+
+    <button type="submit" class="btn">Filter</button>
+    <a class="btn" href="{% url 'voters' %}">Reset</a>
+</form>
+</table>
+{% endblock %} 

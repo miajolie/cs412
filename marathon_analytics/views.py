@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.db.models.query import QuerySet
-from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from . models import Result
 import plotly

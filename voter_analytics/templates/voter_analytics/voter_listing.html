@@ -1,0 +1,70 @@
+<!-- Mia Batista -->
+<!-- templates/voter_analytics/voter_listing.html -->
+
+{% extends "voter_analytics/base.html" %}
+{% block content %}
+
+<div class="search-form">
+        {% include "voter_analytics/search.html" %}    
+    </div>
+
+<h1>Voters</h1>
+
+<div class="row">
+        {% if is_paginated %}
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li>
+                    <span>
+                        <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.previous_page_number }}">
+                        Previous
+                        </a>
+                    </span>
+                </li>
+            {% endif %}
+                <li class="">
+                    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+                </li>
+            {% if page_obj.has_next %}
+                <li>
+                    <span>
+                        <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.next_page_number }}">
+                            Next
+                        </a>
+                    </span>
+                </li>
+            {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+
+
+    <table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Street</th>
+            <th>DOB</th>
+            <th>Party</th>
+            <th>Score</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for v in voters %}
+        <tr>
+        <td>{{ v.first_name }} {{ v.last_name }}</td>
+        <td>{{ v.street_number }} {{ v.street_name }}{% if v.apartment_number %} Apt {{ v.apartment_number }}{% endif %}</td>
+        <td>{{ v.date_of_birth|date:"Y-m-d" }}</td>
+        <td>{{ v.party }}</td>
+        <td>{{ v.voter_score }}</td>
+
+        <td><a class="btn" href="{% url 'voter_detail' v.pk %}">Details</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="muted">No voters match your filters.</td></tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+{% endblock %}

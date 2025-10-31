@@ -1,0 +1,41 @@
+<!-- Mia Batista -->
+<!-- voter_analytics/graphs.html -->
+
+{% extends "voter_analytics/base.html" %}
+{% block content %}
+
+<h1>Voter Analytics</h1>
+
+<!-- reuse the same filter form -->
+<form method="get" class="filter">
+  <div>{{ form.party.label_tag }} {{ form.party }}</div>
+  <div>{{ form.min_birth_year.label_tag }} {{ form.min_birth_year }}</div>
+  <div>{{ form.max_birth_year.label_tag }} {{ form.max_birth_year }}</div>
+  <div>{{ form.voter_score.label_tag }} {{ form.voter_score }}</div>
+
+  <div class="checks">
+    <label>{{ form.v20state }} 20 State</label>
+    <label>{{ form.v21town }} 21 Town</label>
+    <label>{{ form.v21primary }} 21 Primary</label>
+    <label>{{ form.v22general }} 22 General</label>
+    <label>{{ form.v23town }} 23 Town</label>
+  </div>
+
+  <button type="submit" class="btn">Filter</button>
+  <a class="btn" href="{% url 'graphs' %}">Reset</a>
+</form>
+
+<hr>
+
+<h2>Voters by Birth Year</h2>
+{{ birth_year_hist | safe}}
+
+<h2>Party Affiliation</h2>
+{{ party_pie | safe }}
+
+<h2>Participation by Election</h2>
+{{ election_bar | safe}}
+
+<p><a class="btn" href="{% url 'voters' %}">← Back to voter list</a></p>
+
+{% endblock %}

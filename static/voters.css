@@ -1,0 +1,220 @@
+/* Mia Batista — Voter Analytics Styling */
+
+
+body {
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f7f9fa;
+  color: #222;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+/* Header & nav */
+header {
+  background-color: #173f5f;
+  color: white;
+  text-align: center;
+  padding: 1rem 0;
+  margin-bottom: 0;
+}
+
+nav {
+  background-color: #20639b;
+  padding: 0.5rem 0;
+}
+
+nav ul {
+  display: flex;
+  justify-content: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  margin: 0 1.5rem;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+nav ul li a:hover {
+  color: #f6d55c;
+}
+
+/* Container */
+.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Tables */
+table {
+  width: 90%;
+  margin: 1rem auto;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+}
+
+thead {
+  background-color: #173f5f;
+  color: white;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+tbody tr:hover {
+  background-color: #f0f4f7;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  list-style-type: none;
+  margin: 1.5rem 0;
+}
+
+.pagination li {
+  margin: 0 0.5rem;
+}
+
+.pagination a {
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  background-color: #20639b;
+  color: white;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.pagination a:hover {
+  background-color: #173f5f;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #20639b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+  background-color: #173f5f;
+}
+
+a.btn {
+  color: white;
+}
+
+/* Form layout */
+form.filter, form {
+  background: white;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  margin: 1.5rem auto;
+  width: 85%;
+}
+
+form div {
+  margin-bottom: 0.75rem;
+}
+
+/* Only center the search form */
+.search-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem auto;
+  width: fit-content;
+  background-color: #fff;
+  padding: 1.5rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.search-form div,
+.search-form .checks {
+  margin-bottom: 0.75rem;
+}
+
+.search-form .checks {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+
+
+label {
+  font-weight: 500;
+  color: #173f5f;
+  margin-right: 0.5rem;
+}
+
+select, input[type="text"] {
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Graphs */
+.graph {
+  width: 90%;
+  margin: 2rem auto;
+}
+
+/* Headings */
+h1, h2, h3 {
+  color: #90caf9;
+  text-align: center;
+}
+
+/* Muted text (e.g. "No voters match...") */
+.muted {
+  text-align: center;
+  color: #777;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  table, form {
+    width: 100%;
+  }
+
+  th, td {
+    padding: 0.5rem;
+  }
+}
