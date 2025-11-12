@@ -8,7 +8,7 @@
 -->
  
  
-<h1>Login to out blog</h1>
+<h1>Login to our blog</h1>
 <form method="post" action="{% url 'login' %}" >
     {% csrf_token %}
     {{form}}
@@ -21,9 +21,11 @@
     {% else %}
         <input type="hidden" name="next" value="{% url 'my_profile' %}">
     {% endif %}
-
 </form>
 <hr>
+<h3> Hint:</h3>
+<h4> Login: hellyR </h4>
+<h4> Password: miajolie0912</h4>
 <!-- Don't have an account? <a href="{% url 'register' %}">Register here</a>. -->
 
 {% endblock %}

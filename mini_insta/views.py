@@ -36,7 +36,7 @@ class ProfileRequiredMixin(LoginRequiredMixin):
     def is_following_profile(self, other):
         """Return True if the logged-in user follows the given profile."""
         mine = self.get_current_profile()
-        return Follow.objects.filter(profile=mine, follower_profile=other).exists()
+        return Follow.objects.filter(profile=other, follower_profile=mine).exists()
 
 
 class ProfileListView(ListView):
@@ -62,7 +62,7 @@ class ProfileDetailView(ProfileRequiredMixin, DetailView):
         other = self.get_object()
         mine = self.get_current_profile()
         context['is_owner'] = (other == mine)
-        context['is_following'] = Follow.objects.filter(profile=mine, follower_profile=other).exists()
+        context['is_following'] = Follow.objects.filter(profile=other, follower_profile=mine).exists()
 
         return context
 
@@ -335,7 +335,7 @@ class FollowProfileView(ProfileRequiredMixin, View):
         other = Profile.objects.get(pk=self.kwargs['pk'])
 
         # create follow
-        Follow.objects.create(profile=mine, follower_profile=other)
+        Follow.objects.create(profile=other, follower_profile=mine)
 
         # show updated profile page
         context = {
@@ -362,11 +362,11 @@ class UnfollowProfileView(ProfileRequiredMixin, View):
         mine = self.get_current_profile()
         other = Profile.objects.get(pk=self.kwargs['pk'])
 
-        Follow.objects.filter(profile=mine, follower_profile=other).delete()
+        Follow.objects.filter(profile=other, follower_profile=mine).delete()
 
-        context = {
-            'profile': other,
-        }
+        # context = {
+        #     'profile': other,
+        # }
 
 
         pk = self.kwargs['pk']

@@ -24,9 +24,11 @@
                             {% csrf_token%}
                             <li><input class='btn' type="submit" value="Logout"></li>
                         </form>
+
                     {%else%}
                         <li><a href="{% url 'login' %}">Log in</a></li>
                         <a href="{% url 'create_profile' %}">Create Profile</a>
+
                     {% endif %}
                 </ul>
             </nav>
@@ -34,11 +36,11 @@
             
         </header>
  
-        {% if request.user.is_authenticated %}
+        <!-- {% if request.user.is_authenticated %}
                 Logged in user: {{ request.user }}.
         {% else %}
             Not logged in.
-        {% endif %} 
+        {% endif %}  -->
  
        <!-- substitute in the specific content here-->
         <main>
