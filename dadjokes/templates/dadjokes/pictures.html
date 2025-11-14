@@ -1,0 +1,18 @@
+<!-- dadjokes/pictures.html -->
+<!-- displays all the pictures -->
+<!-- Mia Jolie Batista -->
+
+{% extends "dadjokes/base.html" %}
+{% block content %}
+<h1>Random Silly Picture</h1>
+    {% for p in pictures %}
+    <div class="card">
+        <!-- link to the detail! -->
+        <a href="{% url 'picture_detail' p.pk %}"><strong>#{{ p.pk }}</strong></a>
+        <p class="muted">— {{ p.name }} • {{ p.timestamp|date:"M j, Y g:ia" }}</p>
+        <img src="{{ p.image_url }}" alt="Silly"/>
+    </div>
+    {% empty %}
+        <p>No pictures yet.</p>
+    {% endfor %}
+{% endblock %}

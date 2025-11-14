@@ -1,0 +1,12 @@
+<!-- dadjokes/picture_detail.html -->
+<!-- displays one picture -->
+<!-- Mia Jolie Batista -->
+
+{% extends "dadjokes/base.html" %}
+{% block content %}
+<h1>Picture #{{ picture.pk }}</h1>
+<div class="card">
+  <img src="{{ picture.image_url }}" alt="Silly"/>
+  <p class="muted">— {{ picture.name }} • {{ picture.timestamp|date:"M j, Y g:ia" }}</p>
+</div>
+{% endblock %}

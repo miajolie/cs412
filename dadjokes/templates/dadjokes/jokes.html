@@ -1,0 +1,18 @@
+<!-- dadjokes/jokes.html -->
+<!-- displays all the jokes -->
+<!-- Mia Jolie Batista -->
+
+{% extends "dadjokes/base.html" %}
+{% block content %}
+<h1>Random Silly DadJokes</h1>
+    {% for joke in jokes %}
+    <div class="card">
+        <!-- link to the detail! -->
+        <a href="{% url 'joke_detail' joke.pk %}"><strong>#{{ joke.pk }}</strong></a>
+        <p class="muted">— {{ joke.name }} • {{ joke.timestamp|date:"M j, Y g:ia" }}</p>
+        <p>{{joke.text}}</p> 
+    </div>
+    {% empty %}
+        <p>No pictures yet.</p>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,28 @@
+<!-- dadjokes/base.html -->
+<!-- base html for the dadjokes django-->
+<!-- Mia Jolie Batista -->
+
+{%load static%}
+<html>
+<head>
+
+    <title>Welcome to Dad Jokes!</title>
+    <link rel="stylesheet" href="{% static 'dadjokes.css' %}" >
+</head>
+<body>
+
+    <nav>
+        <li> <a href= "{% url 'home' %}"> Home </a></li>
+        <li><a href="{% url 'jokes' %}"> Jokes </a></li>
+        <li><a href="{% url 'pictures' %}"> Pictures </a></li>
+    </nav>
+    <!-- put page speciifc content here -->
+     {% block content %}
+     {% endblock %}
+
+    <footer>
+    That was silly!
+    </footer>
+    
+</body>
+</html>

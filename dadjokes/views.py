@@ -1,11 +1,24 @@
+# dadjokes/views.py
+# holds all the views for the dadjokes app, django application 
+# Mia Jolie Batista
+
+
 from django.shortcuts import render
 from .models import Joke, Picture
 from django.views.generic import DetailView
 
+from rest_framework import generics
+from .serializers import *
+from rest_framework.response import Response
+
 # Create your views here.
 
-def random(request):
+def random_list(request):
     '''displays one joke and picture at random'''
+
+    # maybe i should do a class and call the random choice 
+    # on the get_context_data method to do it that way???
+
     template_name = "dadjokes/random.html"
 
     joke = Joke.objects.order_by("?").first()
@@ -13,8 +26,11 @@ def random(request):
 
     context = {
 
-        "joke": joke, "picture": picture
+        "joke": joke, 
+        "picture": picture
+
     }
+
     return render(request, template_name=template_name, context=context)
 
 def jokes(request):
@@ -63,3 +79,53 @@ class PictureDetailView(DetailView):
         '''gets the joke based on primary key'''
         pk = self.kwargs.get("pk")
         return Picture.objects.get(pk=pk)
+    
+
+# API VIEWS
+
+class APIRandomView(generics.RetrieveAPIView):
+    '''An API view to return random jokes and pictures'''
+    # for the jokes
+    joke_queryset = Joke.objects.all()
+    joke_serializer_class = JokeSerializer
+
+    # for the pictures 
+    picture_queryset = Picture.objects.all()
+    picture_serializer_class = PictureSerializer
+
+    def get (self, request, *args, **kwargs):
+        # pick a random joke + picture
+        joke = self.joke_queryset.order_by("?").first()
+        picture = self.picture_queryset.order_by("?").first()
+
+        joke_data = self.joke_serializer_class(joke).data
+        picture_data = self.picture_serializer_class(picture).data
+
+        return Response({
+            "joke": joke_data,
+            "pictire": picture_data
+        })
+
+class JokeListAPI(generics.ListCreateAPIView):
+    '''An API view to return a list of jokes'''
+    serializer_class = JokeSerializer
+    queryset = Joke.objects.order_by("-timestamp")
+
+class JokeDetailAPI(generics.RetrieveAPIView):
+    '''An API view to return a jokes'''
+    serializer_class = JokeSerializer
+    queryset = Joke.objects.all()
+
+class PictureListAPI(generics.ListCreateAPIView):
+    '''An API view to return a list of picture'''
+    serializer_class = PictureSerializer
+    queryset = Picture.objects.order_by("-timestamp")
+
+class PictureDetailAPI(generics.RetrieveAPIView):
+    '''An API view to return a picture'''
+    serializer_class = PictureSerializer
+    queryset = Picture.objects.all()
+
+
+
+

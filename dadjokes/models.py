@@ -1,4 +1,6 @@
 # dadjokes/models.py
+# the models for the dadjokes django application 
+# Mia Jolie Batista 
 
 
 from django.db import models
@@ -15,7 +17,7 @@ class Joke(models.Model):
         '''returns a string representation of the model instance '''
         return f'{self.name} = {self.text}'
 
-class Picture (models.Model):
+class Picture(models.Model):
     '''Encapsulate the data of a picture'''
 
     image_url = models.URLField(blank=True)
