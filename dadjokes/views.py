@@ -83,28 +83,24 @@ class PictureDetailView(DetailView):
 
 # API VIEWS
 
-class APIRandomView(generics.RetrieveAPIView):
-    '''An API view to return random jokes and pictures'''
-    # for the jokes
-    joke_queryset = Joke.objects.all()
-    joke_serializer_class = JokeSerializer
+class RandomJokeAPI(generics.RetrieveAPIView):
+    '''An API view to return a random joke'''
+    serializer_class = JokeSerializer
+    queryset = Joke.objects.all()   
 
-    # for the pictures 
-    picture_queryset = Picture.objects.all()
-    picture_serializer_class = PictureSerializer
+    def get_object(self):
+        obj = self.get_queryset().order_by("?").first()
+        return obj
 
-    def get (self, request, *args, **kwargs):
-        # pick a random joke + picture
-        joke = self.joke_queryset.order_by("?").first()
-        picture = self.picture_queryset.order_by("?").first()
 
-        joke_data = self.joke_serializer_class(joke).data
-        picture_data = self.picture_serializer_class(picture).data
+class RandomPictureAPI(generics.RetrieveAPIView):
+    '''An API view to return a random picture'''
+    serializer_class = PictureSerializer
+    queryset = Picture.objects.all()
 
-        return Response({
-            "joke": joke_data,
-            "pictire": picture_data
-        })
+    def get_object(self):
+        obj = self.get_queryset().order_by("?").first()
+        return obj
 
 class JokeListAPI(generics.ListCreateAPIView):
     '''An API view to return a list of jokes'''
