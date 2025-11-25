@@ -1,0 +1,23 @@
+<!-- review_form.html -->
+<!-- Mia Batista -->
+
+{% extends "project/base.html" %}
+
+{% block content %}
+  <div class="nt-panel nt-form-card">
+    {% if object %}
+      <h2>Edit Review</h2>
+    {% else %}
+      <h2>Add Review</h2>
+    {% endif %}
+
+    <form method="post" class="nt-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="nt-form-actions">
+        <button type="submit" class="nt-btn nt-btn-primary">Save</button>
+        <a href="{% url 'show_detail' object.show.pk %}" class="nt-btn nt-btn-tertiary">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

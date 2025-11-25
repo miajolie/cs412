@@ -1,0 +1,23 @@
+<!-- show_form.html -->
+<!-- Mia Batista -->
+
+{% extends "project/base.html" %}
+
+{% block content %}
+  <div class="nt-panel nt-form-card">
+    {% if object %}
+      <h2>Edit Show</h2>
+    {% else %}
+      <h2>Add New Show</h2>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" class="nt-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="nt-form-actions">
+        <button type="submit" class="nt-btn nt-btn-primary">Save</button>
+        <a href="{% url 'show_list' %}" class="nt-btn nt-btn-tertiary">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

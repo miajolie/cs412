@@ -1,0 +1,40 @@
+<!-- list_detail.html -->
+<!-- Mia Batista -->
+
+{% extends "project/base.html" %}
+
+{% block content %}
+  <div class="nt-panel">
+    <h2>{{ list.title }}</h2>
+    <p class="nt-small">By {{ list.viewer.display_name }}</p>
+    <p>{{ list.description }}</p>
+
+    {% if request.user.is_authenticated and list.viewer == request.user.viewer_profile %}
+      <div class="nt-detail-actions">
+        <a href="{% url 'list_update' list.pk %}" class="nt-btn nt-btn-secondary">Edit list</a>
+        <a href="{% url 'list_delete' list.pk %}" class="nt-btn nt-btn-tertiary">Delete list</a>
+        <a href="{% url 'listentry_create' list_id=list.pk %}" class="nt-btn nt-btn-primary">
+          + Add show to this list
+        </a>
+      </div>
+    {% endif %}
+  </div>
+
+  <section class="nt-detail-section">
+    <h3>Shows in this list</h3>
+
+    <ul class="nt-chip-list">
+      {% for entry in entries %}
+        <li class="nt-chip">
+          <span>{{ entry.show.title }}</span>
+          <span class="nt-small">({{ entry.show.release_year }})</span>
+          {% if request.user.is_authenticated and list.viewer == request.user.viewer_profile %}
+            <a href="{% url 'listentry_delete' entry.pk %}">✕</a>
+          {% endif %}
+        </li>
+      {% empty %}
+        <li>No shows in this list yet.</li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endblock %}

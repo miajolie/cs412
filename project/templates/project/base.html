@@ -1,0 +1,45 @@
+<!-- templates/base.html -->
+<!-- Mia Batista -->
+
+
+{% load static %}
+<html>
+    <head>
+        <title>TV TRACKER</title>
+        <link rel="stylesheet" href="{% static 'project.css' %}">
+    </head>
+    <body class="nt-body">
+        <header class="nt-header">
+        <div class="nt-logo">
+            <a href="{% url 'home' %}">TV<span>Trackr</span></a>
+        </div>
+
+        <nav class="nt-nav">
+            <a href="{% url 'show_list' %}">Shows</a>
+            <a href="{% url 'list_list' %}">Lists</a>
+        </nav>
+
+        <div class="nt-user">
+            {% if request.user.is_authenticated %}
+                <span class="nt-user-name">
+                    {{ request.user }}
+                </span>
+                <!-- <a class="nt-auth-link" href="{% url 'logout' %}">Log out</a> -->
+                <form action="{% url 'logout' %}" method="POST">
+                    {% csrf_token%}
+                    <li><input class='btn' type="submit" value="Logout"></li>
+                </form>
+            {% else %}
+                <a class="nt-auth-link" href="{% url 'login' %}">Log in</a>
+                <a class="nt-auth-link" href="{% url 'signup' %}">Sign up</a>
+            {% endif %}
+        </div>
+        
+        </header>
+
+        <main class="nt-main">
+        {% block content %}
+        {% endblock %}
+        </main>
+    </body>
+</html>

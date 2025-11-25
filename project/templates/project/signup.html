@@ -1,0 +1,23 @@
+<!-- signup.html -->
+<!-- Mia Batista -->
+
+{% extends "project/base.html" %}
+
+{% block content %}
+  <div class="nt-panel nt-auth-card">
+    <h2>Sign Up</h2>
+
+    <form method="post" class="nt-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="nt-form-actions">
+        <button type="submit" class="nt-btn nt-btn-primary">Create account</button>
+      </div>
+    </form>
+
+    <p class="nt-small">
+      Already have an account?
+      <a href="{% url 'login' %}">Log in here</a>.
+    </p>
+  </div>
+{% endblock %}

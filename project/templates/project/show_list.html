@@ -1,0 +1,43 @@
+<!-- show_list.html -->
+<!-- diaplays al the shows -->
+<!-- Mia Batista -->
+
+{% extends "project/base.html" %}
+
+{% block content %}
+  <section class="nt-list-header">
+    <h2>All Shows</h2>
+
+    {% if request.user.is_authenticated %}
+      <a href="{% url 'show_create' %}" class="nt-btn nt-btn-secondary">
+        + Add a new show
+      </a>
+    {% endif %}
+  </section>
+
+  <section class="nt-row">
+    <div class="nt-card-row">
+      {% for show in shows %}
+        <a href="{% url 'show_detail' show.pk %}" class="nt-card">
+          {% if show.poster_image %}
+            <div class="nt-card-image-wrapper">
+              <img src="{{ show.poster_image.url }}" alt="{{ show.title }}">
+            </div>
+          {% else %}
+            <div class="nt-card-placeholder">
+              {{ show.title }}
+            </div>
+          {% endif %}
+          <div class="nt-card-meta">
+            <span class="nt-card-title">{{ show.title }}</span>
+            <span class="nt-card-sub">
+              {{ show.release_year }} • {{ show.genre }}
+            </span>
+          </div>
+        </a>
+      {% empty %}
+        <p>No shows yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

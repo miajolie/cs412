@@ -1,0 +1,22 @@
+<!-- list_confirm_delete.html -->
+<!-- Mia Batista -->
+
+{% extends "project/base.html" %}
+
+{% block content %}
+  <div class="nt-panel nt-form-card">
+    <h2>Delete List</h2>
+
+    <p class="nt-delete-text">
+      Are you sure you want to delete the list "<strong>{{ object.title }}</strong>"?
+    </p>
+
+    <form method="post" class="nt-form">
+      {% csrf_token %}
+      <div class="nt-form-actions">
+        <button type="submit" class="nt-btn nt-btn-tertiary">Yes, delete</button>
+        <a href="{% url 'list_detail' object.pk %}" class="nt-btn nt-btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

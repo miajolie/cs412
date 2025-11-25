@@ -1,0 +1,39 @@
+<!-- list_list.html -->
+<!-- Mia Batista -->
+
+{% extends "project/base.html" %}
+
+{% block content %}
+  <section class="nt-list-header">
+    <h2>All Lists</h2>
+
+    {% if request.user.is_authenticated %}
+      <a href="{% url 'list_create' %}" class="nt-btn nt-btn-secondary">
+        + Create new list
+      </a>
+    {% endif %}
+  </section>
+
+  <section class="nt-row">
+    <div class="nt-list-grid">
+      {% for list in lists %}
+        <a href="{% url 'list_detail' list.pk %}" class="nt-list-card">
+          <div>
+            <div class="nt-list-card-title">{{ list.title }}</div>
+            <div class="nt-list-card-sub">
+              By {{ list.viewer.display_name }}
+            </div>
+            <div class="nt-list-card-sub">
+              {{ list.description|truncatechars:80 }}
+            </div>
+          </div>
+          <div class="nt-list-card-footer">
+            Created {{ list.created_at|date:"M j, Y" }}
+          </div>
+        </a>
+      {% empty %}
+        <p>No lists yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

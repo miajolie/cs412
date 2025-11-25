@@ -1,0 +1,28 @@
+<!-- login.html -->
+<!-- Mia Batista -->
+
+{% extends "project/base.html" %}
+
+{% block content %}
+  <div class="nt-panel nt-auth-card">
+    <h2>Log In</h2>
+
+    <form method="post" class="nt-form">
+      {% csrf_token %}
+      {{ form.as_p}}
+      <div class="nt-form-actions">
+        <button type="submit" class="nt-btn nt-btn-primary">Log in</button>
+        {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{request.GET.next}}">
+        {% else %}
+            <input type="hidden" name="next" value="{% url 'home' %}">
+        {% endif %}
+      </div>
+    </form>
+
+    <p class="nt-small">
+      Don't have an account?
+      <a href="{% url 'signup' %}">Sign up here</a>.
+    </p>
+  </div>
+{% endblock %}

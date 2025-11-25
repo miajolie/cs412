@@ -1,0 +1,39 @@
+<!-- home.html -->
+<!-- displays the home dashboard -->
+<!-- Mia Batista -->
+
+{% extends "project/base.html" %}
+
+{% block content %}
+  <section class="nt-hero">
+    <div class="nt-hero-text">
+      <h2>Welcome to TVTrackr</h2>
+      <p>Track what you watch, rate your favorites, and build lists like a pro binge-watcher</p>
+      <div class="nt-hero-buttons">
+        <a href="{% url 'show_list' %}" class="nt-btn nt-btn-primary">Browse Shows</a>
+        <a href="{% url 'list_list' %}" class="nt-btn nt-btn-secondary">My Lists</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="nt-row">
+    <h3 class="nt-row-title">Explore All Shows</h3>
+    <div class="nt-card-row">
+      {% for show in shows%}
+        <a href="{% url 'show_detail' show.pk %}" class="nt-card">
+          {% if show.poster_image %}
+            <div class="nt-card-image-wrapper">
+              <img src="{{ show.poster_image.url }}" alt="{{ show.title }}">
+            </div>
+          {% else %}
+            <div class="nt-card-placeholder">
+              {{ show.title }}
+            </div>
+          {% endif %}
+        </a>
+      {% empty %}
+        <p>No shows yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

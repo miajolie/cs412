@@ -20,6 +20,7 @@
                     <!-- URLs for logged in users only -->
                     {% if request.user.is_authenticated %} 
                         <li><a href = "{% url 'my_profile' %}">My Profile</a></li>     
+                        
                         <form action="{% url 'logout' %}" method="POST">
                             {% csrf_token%}
                             <li><input class='btn' type="submit" value="Logout"></li>

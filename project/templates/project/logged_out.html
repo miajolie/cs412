@@ -1,0 +1,24 @@
+<!-- logged_out.html -->
+<!-- Mia Batista -->
+
+{% extends "project/base.html" %}
+
+
+{% block content %}
+  <div class="nt-panel nt-auth-card">
+    <h2>Logged Out</h2>
+
+    <p class="nt-delete-text">
+      You have been logged out of TVTrackr.
+    </p>
+
+    <div class="nt-form-actions">
+      <a href="{% url 'login' %}" class="nt-btn nt-btn-primary">
+        Log back in
+      </a>
+      <a href="{% url 'home' %}" class="nt-btn nt-btn-secondary">
+        Return home
+      </a>
+    </div>
+  </div>
+{% endblock %}

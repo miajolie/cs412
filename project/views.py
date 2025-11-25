@@ -1,3 +1,414 @@
-from django.shortcuts import render
+# project/views.py
+# all the views of my project 
+# created by Mia Batista 
+
+from django.shortcuts import render, redirect
+from .models import Show, Season, Review, List, ListEntry, Viewer
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin 
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, logout
+from .forms import ShowForm, SeasonForm, ReviewForm, ListForm, ListEntryForm
 
 # Create your views here.
+
+def signup_view(request):
+    """Allow a new user to sign up and create a Viewer profile."""
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            # create the User
+            user = form.save()
+
+            # create the Viewer profile
+            Viewer.objects.create(
+                user=user,
+                display_name=user.username,
+            )
+
+            # log in and redirect home
+            login(request, user)
+            return redirect("home")
+    else:
+        form = UserCreationForm()
+
+    context = {
+        'form': form
+    }
+    return render(request, "registration/signup.html", context)
+
+
+class HomeView(TemplateView):
+    """Simple homepage"""
+    model = Show
+    template_name = "project/home.html"
+    context_object_name = "shows"
+    
+    def get_context_data(self, **kwargs):
+        '''to show al shows on the homepage'''
+        context = super().get_context_data(**kwargs)
+        context["shows"] = Show.objects.all()
+        return context
+
+
+class ShowListView(ListView):
+    '''showing all the shows'''
+    model = Show 
+    template_name = 'project/show_list.html'
+    context_object_name = "shows"
+
+class ShowDetailView(DetailView):
+    '''a detailed view of a single show'''
+
+    model = Show
+    template_name = "project/show_detail.html"
+    context_object_name = "show"
+
+    def get_context_data(self, **kwargs):
+        '''getting the seasons and reviews from a show'''
+        context = super().get_context_data(**kwargs)
+        show = self.get_object()
+        context['seasons'] = show.seasons.all()
+        context['reviews'] = show.reviews.all()
+
+        return context
+
+class ShowCreateView(LoginRequiredMixin,CreateView):
+    '''the creation of a show to the database, only allowed by a logged in user'''
+
+    model = Show
+    form_class = ShowForm
+    template_name = 'project/show_form.html'
+
+    def get_login_url(self):
+        '''only allow logged in users '''
+        return reverse('login')
+    
+    def form_valid(self, form):
+        '''form valid method, handles the form submission and saves the new object to 
+        the Django database'''
+        viewer = Viewer.objects.get(user = self.request.user)
+        form.instance.created_by = viewer
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        '''where after creating a form directs the user to'''
+        return reverse('show_detail', args=[self.object.pk])
+
+
+class ShowUpdateView(LoginRequiredMixin, UpdateView):
+    '''updates a certain show'''
+    model = Show
+    template_name = "project/show_form.html"
+    form_class = ShowForm
+
+    def get_login_url(self):
+        '''only allow logged in users '''
+        return reverse('login')
+    
+    def get_queryset(self):
+        '''limit updates to only the shows the logged in user created'''
+
+        query = super().get_queryset()
+        viewer = Viewer.objects.get(user=self.request.user)
+        return query.filter(created_by = viewer)
+    
+    def get_success_url(self):
+        '''once updated, return to the show detail'''
+        return reverse("show_detail", args = [self.object.pk])
+    
+class ShowDeleteView(LoginRequiredMixin, DeleteView):
+    '''deleting a show form view'''
+    model = Show
+    template_name = "project/show_confirm_delete.html"
+
+    def get_login_url(self):
+        '''only allow logged in users '''
+        return reverse('login')
+    
+    def get_queryset(self):
+        '''only allow deletion of the viewer created the show'''
+        query = super().get_queryset()
+        viewer = Viewer.objects.get(user = self.request.user)
+        return query.filter(created_by = viewer)
+    
+    def get_context_data(self, **kwargs):
+        '''add the show and its creator ti the template context'''
+        context = super().get_context_data(**kwargs)
+        context['show'] = self.object
+        context['creator'] = self.object.created_by
+
+        return context
+
+    def get_success_url(self):
+        '''after deleting, return the the main show list'''
+        return reverse('show_list')
+
+class SeasonCreateView(LoginRequiredMixin, CreateView):
+    '''view to add a season to a show'''
+    
+    model=Season
+    form_class = SeasonForm
+    template_name = 'project/season_form.html'
+
+    def get_login_url(self):
+        '''only allow logged in users '''
+        return reverse("login")
+
+    def form_valid(self, form):
+        '''form valid method, handles the form submission and saves the new season object to 
+        the Django database'''
+        show_id = self.kwargs['show_id']
+        show = Show.objects.get(pk = show_id)
+        form.instance.show = show
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        '''after creating a season, go back to the show's detail page'''
+        return reverse ("show_detail", args = [self.object.show.pk])
+
+class SeasonUpdateView(LoginRequiredMixin, UpdateView):
+    '''allow editing the season, only allowed if you created the show'''
+
+    model = Season 
+    form_class = SeasonForm
+    template_name = 'project/season_form.html'
+
+    def get_login_url(self):
+        '''only allow logged in users '''
+        return reverse("login")
+    
+    def get_queryset(self):
+        '''limit updates to seasons whose show was created by the logged-in viewer'''
+        query = super().get_queryset()
+        viewer = Viewer.objects.get(user=self.request.user)
+        return query.filter(show__created_by = viewer)
+
+    def get_success_url(self):
+        '''once updated, return to the show detail'''
+        return reverse("show_detail", args = [self.object.pk])
+    
+class SeasonDeleteView(LoginRequiredMixin, DeleteView):
+    '''allow deleting a season if you created the show'''
+
+    model = Season
+    template_name = 'project/season_confirm_delete.html'
+
+    def get_login_url(self):
+        '''only allow logged in users '''
+        return reverse('login')
+    
+    def get_queryset(self):
+        '''only allow deletion of the viewer created the show'''
+        query = super().get_queryset()
+        viewer = Viewer.objects.get(user = self.request.user)
+        return query.filter(created_by = viewer)
+    
+
+    def get_success_url(self):
+        '''after deleting, return the the show detail'''
+        return reverse("show_detail", args = [self.object.pk])
+
+class ReviewCreateView(LoginRequiredMixin, CreateView):
+    """Create a review for a show (must be logged in)."""
+    model = Review
+    form_class = ReviewForm
+    template_name = "project/review_form.html"
+
+    def get_login_url(self):
+        '''only allow logged in users '''
+        return reverse("login")
+
+    def form_valid(self, form):
+        '''form valid method, handles the form submission and saves the new review object to 
+        the Django database'''
+        viewer = Viewer.objects.get(user=self.request.user)
+        show_id = self.kwargs["show_id"]
+        show = Show.objects.get(pk=show_id)
+
+        form.instance.viewer = viewer
+        form.instance.show = show
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        '''return to show detail after form completes'''
+        return reverse("show_detail", args=[self.object.show.pk])
+
+class ReviewUpdateView(LoginRequiredMixin, UpdateView):
+    """Allow a viewer to edit only their own reviews."""
+    model = Review
+    form_class = ReviewForm
+    template_name = "project/review_form.html"
+
+    def get_login_url(self):
+        '''only allow logged in users '''
+        return reverse("login")
+
+    def get_queryset(self):
+        """Limit updates to reviews by the logged-in viewer."""
+        query = super().get_queryset()
+        viewer = Viewer.objects.get(user=self.request.user)
+        return query.filter(viewer=viewer)
+
+    def get_success_url(self):
+        '''return to show detail after form completes'''
+        return reverse("show_detail", args=[self.object.show.pk])
+
+class ReviewDeleteView(LoginRequiredMixin, DeleteView):
+    """Allow a viewer to delete only their own reviews."""
+    model = Review
+    template_name = "project/review_confirm_delete.html"
+
+    def get_login_url(self):
+        '''only allow logged in users '''
+        return reverse("login")
+
+    def get_queryset(self):
+        """Limit deletion to reviews by the logged-in viewer."""
+        query = super().get_queryset()
+        viewer = Viewer.objects.get(user=self.request.user)
+        return query.filter(viewer=viewer)
+
+    def get_success_url(self):
+        '''return to show detail after deletes'''
+        return reverse("show_detail", args=[self.object.show.pk])
+    
+class ListListView(ListView):
+    """Show all lists (or you can filter by logged-in viewer)."""
+    model = List
+    template_name = "project/list_list.html"
+    context_object_name = "lists"
+
+
+class ListDetailView(DetailView):
+    """Show a single list and its entries."""
+    model = List
+    template_name = "project/list_detail.html"
+    context_object_name = "list"
+
+    def get_context_data(self, **kwargs):
+        '''getting entries for the context'''
+        context = super().get_context_data(**kwargs)
+        context["entries"] = self.object.entries.all().order_by("position", "id")
+        return context
+
+
+class ListCreateView(LoginRequiredMixin, CreateView):
+    """Create a new list (must be logged in)."""
+    model = List
+    form_class = ListForm
+    template_name = "project/list_form.html"
+
+    def get_login_url(self):
+        '''only allow logged in users '''
+        return reverse("login")
+
+    def form_valid(self, form):
+        '''form valid method, handles the form submission and saves the new review object to 
+        the Django database'''
+        viewer = Viewer.objects.get(user=self.request.user)
+        form.instance.viewer = viewer
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        '''return to list detail after form completes'''
+        return reverse("list_detail", args=[self.object.pk])
+
+
+class ListUpdateView(LoginRequiredMixin, UpdateView):
+    """Allow a viewer to edit only their own lists."""
+    model = List
+    form_class = ListForm
+    template_name = "project/list_form.html"
+
+    def get_login_url(self):
+        '''only allow logged in users '''
+        return reverse("login")
+
+    def get_queryset(self):
+        """Limit updates to lists owned by the logged-in viewer."""
+        query = super().get_queryset()
+        viewer = Viewer.objects.get(user=self.request.user)
+        return query.filter(viewer=viewer)
+
+    def get_success_url(self):
+        '''return to list detail after form completes'''
+        return reverse("list_detail", args=[self.object.pk])
+
+
+class ListDeleteView(LoginRequiredMixin, DeleteView):
+    """Allow a viewer to delete only their own lists."""
+    model = List
+    template_name = "project/list_confirm_delete.html"
+
+
+    def get_login_url(self):
+        '''only allow logged in users '''
+        return reverse("login")
+
+    def get_queryset(self):
+        """Limit deletion to lists owned by the logged-in viewer."""
+        query = super().get_queryset()
+        viewer = Viewer.objects.get(user=self.request.user)
+        return query.filter(viewer=viewer)
+    
+    def get_success_url(self):
+        '''return to lists after deletes'''
+        return reverse("list_list")
+    
+
+
+class ListEntryCreateView(LoginRequiredMixin, CreateView):
+    """Add a show to a list (must own the list)."""
+    model = ListEntry
+    form_class = ListEntryForm
+    template_name = "project/listentry_form.html"
+
+    def get_login_url(self):
+        '''only allow logged in users '''
+        return reverse("login")
+
+    def form_valid(self, form):
+        '''form valid method, handles the form submission and saves the new review object to 
+        the Django database'''
+        viewer = Viewer.objects.get(user=self.request.user)
+        list_id = self.kwargs["list_id"]
+
+        # only allow adding to a list the viewer owns
+        list_object = List.objects.get(pk=list_id, viewer=viewer)
+        form.instance.list = list_object
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        '''return to list detail after form completes'''
+        return reverse("list_detail", args=[self.object.list.pk])
+
+
+class ListEntryDeleteView(LoginRequiredMixin, DeleteView):
+    """Allow a viewer to remove shows only from their own lists."""
+    model = ListEntry
+    template_name = "project/listentry_confirm_delete.html"
+
+    def get_login_url(self):
+        '''only allow logged in users '''
+        return reverse("login")
+
+    def get_queryset(self):
+        """Limit deletion to entries belonging to lists owned by viewer."""
+        query = super().get_queryset()
+        viewer = Viewer.objects.get(user=self.request.user)
+        return query.filter(list__viewer=viewer)
+
+    def get_success_url(self):
+        '''return to list detail after form completes'''
+        return reverse("list_detail", args=[self.object.list.pk])
+
+    
+    
+
+
+
+
+
+

@@ -1,0 +1,93 @@
+<!-- show_detail.html -->
+<!-- all the details on one show -->
+<!-- Mia Batista -->
+
+{% extends "project/base.html" %}
+
+{% block content %}
+  <section class="nt-detail">
+    <div class="nt-detail-main">
+      <div class="nt-detail-poster">
+        {% if show.poster_image %}
+          <img src="{{ show.poster_image.url }}" alt="{{ show.title }}">
+        {% else %}
+          <div class="nt-card-placeholder">
+            {{ show.title }}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="nt-detail-text">
+        <h2>{{ show.title }}</h2>
+        <p class="nt-detail-sub">
+          {{ show.release_year }} • {{ show.genre }} • {{ show.get_status_display }}
+        </p>
+        <p class="nt-detail-desc">{{ show.description }}</p>
+
+        {% if request.user.is_authenticated and show.created_by == request.user.viewer_profile %}
+          <div class="nt-detail-actions">
+            <a href="{% url 'show_update' show.pk %}" class="nt-btn nt-btn-secondary">Edit</a>
+            <a href="{% url 'show_delete' show.pk %}" class="nt-btn nt-btn-tertiary">Delete</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <section class="nt-detail-section">
+    <h3>Seasons</h3>
+    {% if request.user.is_authenticated and show.created_by == request.user.viewer_profile %}
+      <a href="{% url 'season_create' show_id=show.pk %}" class="nt-link-inline">
+        + Add season
+      </a>
+    {% endif %}
+
+    <ul class="nt-season-list">
+      {% for season in seasons %}
+        <li>
+          <strong>Season {{ season.season_number }}</strong>
+          {% if season.title %} – {{ season.title }}{% endif %}
+          {% if season.release_year %} ({{ season.release_year }}){% endif %}
+          {% if request.user.is_authenticated and show.created_by == request.user.viewer_profile %}
+            <span class="nt-season-actions">
+              <a href="{% url 'season_update' season.pk %}">Edit</a> |
+              <a href="{% url 'season_delete' season.pk %}">Delete</a>
+            </span>
+          {% endif %}
+        </li>
+      {% empty %}
+        <li>No seasons added yet.</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section class="nt-detail-section">
+    <h3>Reviews</h3>
+    {% if request.user.is_authenticated %}
+      <a href="{% url 'review_create' show_id=show.pk %}" class="nt-link-inline">
+        + Add review
+      </a>
+    {% endif %}
+
+    <ul class="nt-review-list">
+      {% for review in reviews %}
+        <li>
+          <div class="nt-review-header">
+            <span class="nt-review-rating">⭐ {{ review.rating }}</span>
+            <span class="nt-review-author">{{ review.viewer.display_name }}</span>
+          </div>
+          <p class="nt-review-text">{{ review.text }}</p>
+
+          {% if request.user.is_authenticated and review.viewer == request.user.viewer_profile %}
+            <div class="nt-review-actions">
+              <a href="{% url 'review_update' review.pk %}">Edit</a> |
+              <a href="{% url 'review_delete' review.pk %}">Delete</a>
+            </div>
+          {% endif %}
+        </li>
+      {% empty %}
+        <li>No reviews yet.</li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endblock %}
