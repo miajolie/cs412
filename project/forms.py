@@ -12,7 +12,12 @@ class ShowForm(forms.ModelForm):
         model = Show
         fields = ["title", "description", "release_year", "genre", "status", "poster_image"]
 
-
+class WatchForm(forms.ModelForm):
+    '''for for create a watched show'''
+    class Meta:
+        model = Watch
+        fields = ["status"]
+                
 class SeasonForm(forms.ModelForm):
     """Form for creating or updating a Season"""
     class Meta:

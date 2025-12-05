@@ -3,13 +3,13 @@
 # created by Mia Batista 
 
 from django.shortcuts import render, redirect
-from .models import Show, Season, Review, List, ListEntry, Viewer
+from .models import Show, Season, Review, List, ListEntry, Viewer, Watch
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
-from .forms import ShowForm, SeasonForm, ReviewForm, ListForm, ListEntryForm
+from .forms import ShowForm, SeasonForm, ReviewForm, ListForm, ListEntryForm, WatchForm
 
 # Create your views here.
 
@@ -36,7 +36,8 @@ def signup_view(request):
     context = {
         'form': form
     }
-    return render(request, "registration/signup.html", context)
+
+    return render(request, "project/signup.html", context)
 
 
 class HomeView(TemplateView):
@@ -50,6 +51,111 @@ class HomeView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["shows"] = Show.objects.all()
         return context
+    
+class ViewerProfileView(LoginRequiredMixin, TemplateView):
+    """Profile page for the logged-in viewer: shows & their reviews."""
+    template_name = "project/profile.html"
+
+    def get_login_url(self):
+        return reverse("login")
+
+    def get_context_data(self, **kwargs):
+        '''conext data for a profile'''
+        context = super().get_context_data(**kwargs)
+        viewer = Viewer.objects.get(user=self.request.user)
+
+        # all shows this viewer created
+        shows = Show.objects.filter(created_by=viewer).order_by("title")
+
+        # all reviews this viewer has written (for the bottom section if you want it)
+        reviews = Review.objects.filter(viewer=viewer).select_related("show")
+        watches = Watch.objects.filter(viewer=viewer).select_related("show").order_by("-added_at")
+
+
+        context["viewer"] = viewer
+        context["shows"] = shows
+        context["reviews"] = reviews
+        context['watches'] = watches
+        return context
+
+class WatchCreateView(LoginRequiredMixin, CreateView):
+    '''Add a show to the viewer's watchlist'''
+    model = Watch
+    form_class = WatchForm
+    template_name = "project/watch_form.html"
+
+    def get_login_url(self):
+        return reverse("login")
+    
+    def dispatch(self, request, *args, **kwargs):
+        '''prevent adding the same show twice!'''
+        viewer = Viewer.objects.get(user = request.user)
+        show = Show.objects.get(pk = self.kwargs['show_id'])
+        watch = Watch.objects.filter(viewer=viewer, show=show).exists()
+        
+        if watch:
+            # already in portfolio!
+            return redirect("viewer_profile")
+
+
+        return super().dispatch(request, *args, **kwargs)
+    
+    def form_valid(self, form):
+        '''handle saving the show and the viewer'''
+
+        viewer = Viewer.objects.get(user = self.request.user)
+        show = Show.objects.get(pk=self.kwargs['show_id'])
+
+        form.instance.viewer = viewer
+        form.instance.show = show
+        
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        '''if successful....'''
+        return reverse("viewer_profile")
+
+class WatchUpdateView(LoginRequiredMixin, UpdateView):
+    """Change the status of a watch entry (Watching / Finished)."""
+    model = Watch
+    form_class = WatchForm
+    template_name = "project/watch_form.html"
+
+    def get_login_url(self):
+        return reverse("login")
+
+    def get_queryset(self):
+        # only let the logged-in viewer edit their own watch entries
+        viewer = Viewer.objects.get(user=self.request.user)
+        return super().get_queryset().filter(viewer=viewer)
+
+    def get_success_url(self):
+        return reverse("project/profile")
+
+class ShowReviewPageView(LoginRequiredMixin, DetailView):
+    """Show a single show with *this viewer's review (if it exists)."""
+    model = Show
+    template_name = "project/show_review_page.html"
+    context_object_name = "show"
+
+    def get_login_url(self):
+        return reverse("login")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        viewer = Viewer.objects.get(user=self.request.user)
+
+        # grab the review for THIS show + THIS viewer, if any
+        my_review = Review.objects.filter(
+            show=self.object,
+            viewer=viewer
+        ).first()
+
+        context["viewer"] = viewer
+        context["my_review"] = my_review
+        return context
+
 
 
 class ShowListView(ListView):
@@ -71,6 +177,7 @@ class ShowDetailView(DetailView):
         show = self.get_object()
         context['seasons'] = show.seasons.all()
         context['reviews'] = show.reviews.all()
+
 
         return context
 
@@ -164,6 +271,12 @@ class SeasonCreateView(LoginRequiredMixin, CreateView):
         form.instance.show = show
         return super().form_valid(form)
     
+    def get_context_data(self, **kwargs):
+        '''to get the show pk'''
+        context = super().get_context_data(**kwargs)
+        context['show'] = Show.objects.get(pk=self.kwargs['show_id'])
+        return context
+    
     def get_success_url(self):
         '''after creating a season, go back to the show's detail page'''
         return reverse ("show_detail", args = [self.object.show.pk])
@@ -209,6 +322,8 @@ class SeasonDeleteView(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         '''after deleting, return the the show detail'''
         return reverse("show_detail", args = [self.object.pk])
+    
+
 
 class ReviewCreateView(LoginRequiredMixin, CreateView):
     """Create a review for a show (must be logged in)."""
@@ -230,10 +345,18 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
         form.instance.viewer = viewer
         form.instance.show = show
         return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        '''to get the show pk'''
+        context = super().get_context_data(**kwargs)
+        context['show'] = Show.objects.get(pk=self.kwargs['show_id'])
+        return context
 
     def get_success_url(self):
         '''return to show detail after form completes'''
         return reverse("show_detail", args=[self.object.show.pk])
+    
+
 
 class ReviewUpdateView(LoginRequiredMixin, UpdateView):
     """Allow a viewer to edit only their own reviews."""
@@ -377,12 +500,19 @@ class ListEntryCreateView(LoginRequiredMixin, CreateView):
 
         # only allow adding to a list the viewer owns
         list_object = List.objects.get(pk=list_id, viewer=viewer)
-        form.instance.list = list_object
+        form.instance.listed = list_object
         return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        '''to allow for access to the pk'''
+        context = super().get_context_data(**kwargs)
+        context["list_id"] = self.kwargs["list_id"]
+        return context
+
 
     def get_success_url(self):
         '''return to list detail after form completes'''
-        return reverse("list_detail", args=[self.object.list.pk])
+        return reverse("list_detail", args=[self.object.listed.pk])
 
 
 class ListEntryDeleteView(LoginRequiredMixin, DeleteView):
@@ -402,7 +532,7 @@ class ListEntryDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         '''return to list detail after form completes'''
-        return reverse("list_detail", args=[self.object.list.pk])
+        return reverse("list_detail", args=[self.object.listed.pk])
 
     
     

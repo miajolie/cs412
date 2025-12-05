@@ -24,19 +24,27 @@
         </p>
         <p class="nt-detail-desc">{{ show.description }}</p>
 
-        {% if request.user.is_authenticated and show.created_by == request.user.viewer_profile %}
+        {% if request.user.is_authenticated and show.created_by == request.user.viewer %}
           <div class="nt-detail-actions">
             <a href="{% url 'show_update' show.pk %}" class="nt-btn nt-btn-secondary">Edit</a>
             <a href="{% url 'show_delete' show.pk %}" class="nt-btn nt-btn-tertiary">Delete</a>
           </div>
         {% endif %}
+        {% if request.user.is_authenticated %}
+          <div class="nt-detail-actions">
+            <a href="{% url 'watch_add' show_id=show.pk %}" class="nt-btn nt-btn-secondary">
+              + Add to my portfolio
+             </a>
+  </div>
+{% endif %}
+
       </div>
     </div>
   </section>
 
   <section class="nt-detail-section">
     <h3>Seasons</h3>
-    {% if request.user.is_authenticated and show.created_by == request.user.viewer_profile %}
+    {% if request.user.is_authenticated and show.created_by == request.user.viewer%}
       <a href="{% url 'season_create' show_id=show.pk %}" class="nt-link-inline">
         + Add season
       </a>
@@ -48,7 +56,7 @@
           <strong>Season {{ season.season_number }}</strong>
           {% if season.title %} – {{ season.title }}{% endif %}
           {% if season.release_year %} ({{ season.release_year }}){% endif %}
-          {% if request.user.is_authenticated and show.created_by == request.user.viewer_profile %}
+          {% if request.user.is_authenticated and show.created_by == request.user.viewer %}
             <span class="nt-season-actions">
               <a href="{% url 'season_update' season.pk %}">Edit</a> |
               <a href="{% url 'season_delete' season.pk %}">Delete</a>
@@ -78,7 +86,8 @@
           </div>
           <p class="nt-review-text">{{ review.text }}</p>
 
-          {% if request.user.is_authenticated and review.viewer == request.user.viewer_profile %}
+          {% if request.user.is_authenticated and review.viewer == request.user.viewer %}
+          <!-- need to fix this conditional -->
             <div class="nt-review-actions">
               <a href="{% url 'review_update' review.pk %}">Edit</a> |
               <a href="{% url 'review_delete' review.pk %}">Delete</a>

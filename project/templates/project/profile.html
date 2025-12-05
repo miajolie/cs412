@@ -1,0 +1,52 @@
+<!-- profile.html -->
+<!-- displays the users profile page -->
+<!-- Mia Batista -->
+
+{% extends "project/base.html" %}
+
+{% block content %}
+  <div class="nt-panel">
+    <h2>{{ viewer.display_name }}</h2>
+    <p class="nt-small">
+      Your shows & reviews
+    </p>
+  </div>
+
+{# My portfolio / watch list #}
+<section class="nt-row">
+  <h3 class="nt-row-title">My Portfolio / Watch List</h3>
+  <div class="nt-card-row">
+    {% for watch in watches %}
+      <a href="{% url 'show_review_page' watch.show.pk %}" class="nt-card">
+        {% if watch.show.poster_image %}
+          <div class="nt-card-image-wrapper">
+            <img src="{{ watch.show.poster_image.url }}" alt="{{ watch.show.title }}">
+          </div>
+        {% else %}
+          <div class="nt-card-placeholder">
+            {{ watch.show.title }}
+          </div>
+        {% endif %}
+        <div class="nt-card-meta">
+          <span class="nt-card-title">{{ watch.show.title }}</span>
+          <span class="nt-card-sub">
+            Status:
+            {% if watch.status == "W" %}
+              Still watching
+            {% else %}
+              Finished
+            {% endif %}
+          </span>
+          <span class="nt-card-sub">
+            <a href="{% url 'watch_update' watch.pk %}">Change status</a>
+          </span>
+        </div>
+      </a>
+    {% empty %}
+      <p>You haven't added any shows to your portfolio yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}
+

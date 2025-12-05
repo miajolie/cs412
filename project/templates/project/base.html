@@ -17,6 +17,7 @@
         <nav class="nt-nav">
             <a href="{% url 'show_list' %}">Shows</a>
             <a href="{% url 'list_list' %}">Lists</a>
+            <a href=" {% url 'viewer_profile'%}">Profile</a>
         </nav>
 
         <div class="nt-user">
@@ -24,7 +25,7 @@
                 <span class="nt-user-name">
                     {{ request.user }}
                 </span>
-                <!-- <a class="nt-auth-link" href="{% url 'logout' %}">Log out</a> -->
+
                 <form action="{% url 'logout' %}" method="POST">
                     {% csrf_token%}
                     <li><input class='btn' type="submit" value="Logout"></li>

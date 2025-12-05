@@ -9,7 +9,7 @@
     <p class="nt-small">By {{ list.viewer.display_name }}</p>
     <p>{{ list.description }}</p>
 
-    {% if request.user.is_authenticated and list.viewer == request.user.viewer_profile %}
+    {% if request.user.is_authenticated and list.viewer == request.user.viewer %}
       <div class="nt-detail-actions">
         <a href="{% url 'list_update' list.pk %}" class="nt-btn nt-btn-secondary">Edit list</a>
         <a href="{% url 'list_delete' list.pk %}" class="nt-btn nt-btn-tertiary">Delete list</a>

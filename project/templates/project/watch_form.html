@@ -1,0 +1,20 @@
+<!-- watch_form.html -->
+<!-- add or update a show to add to your profile -->
+<!-- Mia Batista -->
+
+{% extends "project/base.html" %}
+
+{% block content %}
+  <div class="nt-panel nt-form-card">
+    <h2>Update Watch Status</h2>
+
+    <form method="post" class="nt-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="nt-form-actions">
+        <button type="submit" class="nt-btn nt-btn-primary">Save</button>
+        <a href="{% url 'viewer_profile' %}" class="nt-btn nt-btn-tertiary">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

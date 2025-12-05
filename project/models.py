@@ -43,6 +43,8 @@ class Show(models.Model):
         choices=STATUS_CHOICES,
         default="ongoing",)
     poster_image = models.ImageField(blank=True)
+    created_by = models.ForeignKey(Viewer,on_delete=models.CASCADE,related_name="created_shows",blank=True,null=True)
+
 
     def __str__(self):
         '''string representation of Viewer'''
@@ -104,8 +106,7 @@ class List(models.Model):
         return f'Review of {self.title} ({self.viewer})'
     
 class ListEntry(models.Model):
-    """encapsulates the relationship between Show and List
-     to allow for ranking """
+    """encapsulates the relationship between Show and List to allow for ranking """
     
     listed = models.ForeignKey(List, on_delete=models.CASCADE, related_name="entries")
     show = models.ForeignKey(Show, on_delete=models.CASCADE, related_name="list_entries")
@@ -121,10 +122,23 @@ class ListEntry(models.Model):
         '''string representation of the ListEntry Class'''
         return f"{self.show.title} in {self.listed.title}"
 
+class Watch(models.Model):
+    '''model that stores if a Viewer is watching or has finished a show'''
+    
+    STATUS_CHOICES = [
+        ("W", "Watching"),
+        ("F", "Finished"),
+    ]
+
+    viewer = models.ForeignKey(Viewer,on_delete=models.CASCADE,related_name="watches")
+    show = models.ForeignKey(Show,on_delete=models.CASCADE,related_name="watches")
+    status = models.CharField(max_length=1,choices=STATUS_CHOICES,default="W")
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("viewer", "show")
+
+    def __str__(self):
+        return f"{self.viewer.display_name} – {self.show.title} ({self.get_status_display()})"
 
 
-# If time:
-# SeasonStatus (provides "watched" info for each season)
-# •      viewer - ForeignKey to Viewer
-# •      season - ForeignKey to Season
-# •      status  - choice: "planned","watching", "completed"

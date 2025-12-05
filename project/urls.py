@@ -20,13 +20,22 @@ urlpatterns=[
 
     # home path 
     path('', views.HomeView.as_view(), name='home'),
-    
+
+    # viewer
+    path("profile/", views.ViewerProfileView.as_view(), name="viewer_profile"),
+
+    # watch
+    path("show/<int:show_id>/watch/add/", views.WatchCreateView.as_view(),name="watch_add"),
+    path("watch/<int:pk>/edit/",views.WatchUpdateView.as_view(),name="watch_update"),
+
     #shows urls
     path('shows/', views.ShowListView.as_view(), name='show_list'),
     path('shows/<int:pk>/', views.ShowDetailView.as_view(), name='show_detail'),
     path('shows/create/', views.ShowCreateView.as_view(), name='show_create'),
     path('shows/<int:pk>/update/', views.ShowUpdateView.as_view(), name='show_update'),
     path('shows/<int:pk>/delete/', views.ShowDeleteView.as_view(), name='show_delete'),
+    path("my_shows/<int:pk>/",views.ShowReviewPageView.as_view(),name="show_review_page"),
+
 
     # seasons urls
     path('shows/<int:show_id>/seasons/create/', views.SeasonCreateView.as_view(), name='season_create'),
@@ -37,6 +46,8 @@ urlpatterns=[
     path('shows/<int:show_id>/reviews/create/', views.ReviewCreateView.as_view(), name='review_create'),
     path('reviews/<int:pk>/update/', views.ReviewUpdateView.as_view(), name='review_update'),
     path('reviews/<int:pk>/delete/', views.ReviewDeleteView.as_view(), name='review_delete'),
+
+
 
     # Lists urls 
     path('lists/', views.ListListView.as_view(), name='list_list'),

@@ -1,0 +1,65 @@
+<!-- show_review_page.html -->
+<!-- Displays the review from the person who wrote it -->
+<!-- Mia Batista -->
+
+{% extends "project/base.html" %}
+
+
+{% block content %}
+<section class="nt-detail">
+  <div class="nt-detail-main">
+
+    <!-- LEFT: Poster -->
+    <div class="nt-detail-poster">
+      {% if show.poster_image %}
+        <img src="{{ show.poster_image.url }}" alt="{{ show.title }}">
+      {% else %}
+        <div class="nt-card-placeholder" style="width:220px;">
+          {{ show.title }}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- RIGHT: Review area -->
+    <div class="nt-detail-text">
+      <h2>{{ show.title }}</h2>
+      <p class="nt-detail-sub">
+        {{ show.release_year }} • {{ show.genre }}
+      </p>
+
+      {% if my_review %}
+        <h3>Your Review</h3>
+        <p class="nt-review-text">{{ my_review.text }}</p>
+        <p class="nt-detail-sub">
+          ⭐ Rating: {{ my_review.rating }}
+        </p>
+        <div class="nt-detail-actions">
+          <a href="{% url 'review_update' my_review.pk %}" class="nt-btn nt-btn-secondary">
+            Edit review
+          </a>
+          <a href="{% url 'review_delete' my_review.pk %}" class="nt-btn nt-btn-tertiary">
+            Delete review
+          </a>
+          <a href="{% url 'show_detail' show.pk %}" class="nt-btn nt-btn-secondary">
+            View show page
+          </a>
+        </div>
+      {% else %}
+        <h3>No review yet</h3>
+        <p class="nt-review-text">
+          You haven't left a review for this show yet.
+        </p>
+        <div class="nt-detail-actions">
+          <a href="{% url 'review_create' show_id=show.pk %}" class="nt-btn nt-btn-primary">
+            + Add a review
+          </a>
+          <a href="{% url 'show_detail' show.pk %}" class="nt-btn nt-btn-secondary">
+            View show page
+          </a>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+</section>
+{% endblock %}
