@@ -6,7 +6,13 @@
 {% block content %}
   <div class="nt-panel">
     <h2>{{ list.title }}</h2>
-    <p class="nt-small">By {{ list.viewer.display_name }}</p>
+    <p class="nt-small">By 
+      <a href="{% url 'viewer_public_profile' list.viewer.pk %}" class="nt-user-link">
+              {{ list.viewer.display_name }}
+      </a>
+    </p>
+
+
     <p>{{ list.description }}</p>
 
     {% if request.user.is_authenticated and list.viewer == request.user.viewer %}
@@ -23,18 +29,34 @@
   <section class="nt-detail-section">
     <h3>Shows in this list</h3>
 
-    <ul class="nt-chip-list">
+    <div class="nt-show-grid">
+    
       {% for entry in entries %}
-        <li class="nt-chip">
-          <span>{{ entry.show.title }}</span>
-          <span class="nt-small">({{ entry.show.release_year }})</span>
-          {% if request.user.is_authenticated and list.viewer == request.user.viewer_profile %}
-            <a href="{% url 'listentry_delete' entry.pk %}">✕</a>
+        <div class="nt-card">
+          <a href="{% url 'show_review_page' entry.show.pk %}" >
+          {% if entry.show.poster_image %}
+            <div class="nt-card-image-wrapper">
+              <img src="{{ entry.show.poster_image.url }}" alt="{{ entry.show.title }}">
+            </div>
+          {% else %}
+            <div class="nt-card-placeholder">
+              {{ entry.show.title }}
+            </div>
           {% endif %}
-        </li>
+          <div class="nt-card-meta">
+            <span class="nt-card-title">{{ entry.show.title }}</span>
+            <span class="nt-card-sub">
+              {{ entry.show.release_year }} • {{ entry.show.genre }}
+            </span>
+            {% if request.user.is_authenticated and list.viewer == request.user.viewer %}
+              <a href="{% url 'listentry_delete' entry.pk %}">Delete</a>
+            {% endif %}
+          </div>
+          </a>
+      </div>
       {% empty %}
         <li>No shows in this list yet.</li>
       {% endfor %}
-    </ul>
+  </div>
   </section>
 {% endblock %}

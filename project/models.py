@@ -57,6 +57,7 @@ class Season(models.Model):
     show = models.ForeignKey(Show, on_delete=models.CASCADE,related_name="seasons")
     season_number = models.PositiveIntegerField()
     title = models.TextField(blank=True)
+    created_by = models.ForeignKey(Viewer, on_delete=models.CASCADE, related_name="viewer",blank=True,null=True)
 
     # provides specifics when storing data in the database
     # ordering, done by show then season in that order 
@@ -128,11 +129,12 @@ class Watch(models.Model):
     STATUS_CHOICES = [
         ("W", "Watching"),
         ("F", "Finished"),
+        ("P", "Want to Watch")
     ]
 
     viewer = models.ForeignKey(Viewer,on_delete=models.CASCADE,related_name="watches")
     show = models.ForeignKey(Show,on_delete=models.CASCADE,related_name="watches")
-    status = models.CharField(max_length=1,choices=STATUS_CHOICES,default="W")
+    status = models.CharField(max_length=1,choices=STATUS_CHOICES,default="P")
     added_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

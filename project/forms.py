@@ -6,8 +6,15 @@ from django import forms
 from .models import *
 
 
+class ViewerUpdateForm(forms.ModelForm):
+    '''way to add bio, display name, and avatar without making signu form complicated'''
+    class Meta:
+        model = Viewer
+        fields = ['display_name', 'bio', 'avatar']
+
 class ShowForm(forms.ModelForm):
     """Form for creating or updating a Show"""
+    
     class Meta:
         model = Show
         fields = ["title", "description", "release_year", "genre", "status", "poster_image"]

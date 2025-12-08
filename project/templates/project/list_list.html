@@ -14,26 +14,42 @@
     {% endif %}
   </section>
 
-  <section class="nt-row">
-    <div class="nt-list-grid">
-      {% for list in lists %}
-        <a href="{% url 'list_detail' list.pk %}" class="nt-list-card">
-          <div>
+<section class="nt-row">
+  <div class="nt-list-grid">
+    {% for list in lists %}
+      <div class="nt-list-card">
+        <div class="nt-list-card-main">
+          <a href="{% url 'list_detail' list.pk %}" class="nt-list-card-title-link">
             <div class="nt-list-card-title">{{ list.title }}</div>
-            <div class="nt-list-card-sub">
-              By {{ list.viewer.display_name }}
-            </div>
-            <div class="nt-list-card-sub">
-              {{ list.description}}
-            </div>
+          </a>
+
+          <div class="nt-list-card-sub">
+            By
+            <a href="{% url 'viewer_public_profile' list.viewer.pk %}" class="nt-user-link">
+              {{ list.viewer.display_name }}
+            </a>
           </div>
-          <div class="nt-list-card-footer">
+
+          <div class="nt-list-card-sub nt-list-card-description">
+            {{ list.description }}
+          </div>
+        </div>
+
+        <div class="nt-list-card-footer">
+          <span class="nt-pill">
+            {{ list.entries.count }} show{% if list.entries.count != 1 %}s{% endif %}
+          </span>
+          <span class="nt-list-card-dot">•</span>
+          <span class="nt-list-card-date">
             Created {{ list.created_at|date:"M j, Y" }}
-          </div>
-        </a>
-      {% empty %}
-        <p>No lists yet.</p>
-      {% endfor %}
-    </div>
-  </section>
+          </span>
+        </div>
+      </div>
+    {% empty %}
+      <p>No lists yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+
 {% endblock %}

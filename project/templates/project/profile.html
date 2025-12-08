@@ -1,52 +1,181 @@
-<!-- profile.html -->
-<!-- displays the users profile page -->
-<!-- Mia Batista -->
-
 {% extends "project/base.html" %}
 
 {% block content %}
-  <div class="nt-panel">
-    <h2>{{ viewer.display_name }}</h2>
-    <p class="nt-small">
-      Your shows & reviews
-    </p>
+
+  <!-- PROFILE HEADER -->
+  <div class="nt-profile-header nt-panel">
+    <div class="nt-profile-avatar">
+      {% if viewer.avatar %}
+        <img src="{{ viewer.avatar.url }}" alt="{{ viewer.display_name }}">
+      {% else %}
+        <div class="nt-profile-avatar-placeholder">
+          {{ viewer.display_name }}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="nt-profile-meta">
+      <h2>{{ viewer.display_name }}</h2>
+      <p class="nt-small">@{{ viewer.user.username }}</p>
+
+      <p class="nt-profile-bio">
+        {% if viewer.bio %}
+          {{ viewer.bio }}
+        {% else %}
+          <span class="nt-small">No bio yet. Tell people a little about you!</span>
+        {% endif %}
+      </p>
+
+      <div class="nt-profile-stats">
+        <span>{{ watches|length }} shows in portfolio</span>
+        <span>{{ watching_count }} still watching</span>
+        <span>{{ finished_count }} finished</span>
+      </div>
+
+      <div class="nt-profile-actions">
+        <a href="{% url 'viewer_edit' %}" class="nt-btn nt-btn-secondary">
+          Edit profile
+        </a>
+      </div>
+    </div>
   </div>
 
-{# My portfolio / watch list #}
-<section class="nt-row">
-  <h3 class="nt-row-title">My Portfolio / Watch List</h3>
-  <div class="nt-card-row">
-    {% for watch in watches %}
-      <a href="{% url 'show_review_page' watch.show.pk %}" class="nt-card">
-        {% if watch.show.poster_image %}
-          <div class="nt-card-image-wrapper">
-            <img src="{{ watch.show.poster_image.url }}" alt="{{ watch.show.title }}">
-          </div>
-        {% else %}
-          <div class="nt-card-placeholder">
-            {{ watch.show.title }}
-          </div>
-        {% endif %}
+
+  <!-- Portfolio: all shows you've logged -->
+  <section class="nt-row">
+    <h3 class="nt-row-title">My Portfolio</h3>
+    <div class="nt-card-row">
+      {% for watch in watches %}
+      <div class="nt-card">
+        <a href="{% url 'show_review_page' watch.show.pk %}" class="nt-card">
+          {% if watch.show.poster_image %}
+            <div class="nt-card-image-wrapper">
+              <img src="{{ watch.show.poster_image.url }}" alt="{{ watch.show.title }}">
+            </div>
+          {% else %}
+            <div class="nt-card-placeholder">
+              {{ watch.show.title }}
+            </div>
+          {% endif %}
+        </a>
+
         <div class="nt-card-meta">
-          <span class="nt-card-title">{{ watch.show.title }}</span>
-          <span class="nt-card-sub">
-            Status:
-            {% if watch.status == "W" %}
-              Still watching
-            {% else %}
-              Finished
-            {% endif %}
-          </span>
+          
           <span class="nt-card-sub">
             <a href="{% url 'watch_update' watch.pk %}">Change status</a>
           </span>
+          <span class="nt-card-sub">
+            <a href="{% url 'watch_delete' watch.pk %}">Remove from profile</a>
+          </span>
         </div>
-      </a>
+      </div>
+      {% empty %}
+        <p>You haven't added any shows to your portfolio yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+<!-- Want to Watch -->
+<section class="nt-row">
+  <h3 class="nt-row-title">Want to Watch</h3>
+  <div class="nt-card-row">
+    {% for watch in planning %}
+      <div class="nt-card">
+        <a href="{% url 'show_review_page' watch.show.pk %}">
+          {% if watch.show.poster_image %}
+            <div class="nt-card-image-wrapper">
+              <img src="{{ watch.show.poster_image.url }}" alt="{{ watch.show.title }}">
+            </div>
+          {% else %}
+            <div class="nt-card-placeholder">
+              {{ watch.show.title }}
+            </div>
+          {% endif %}
+        </a>
+
+        <div class="nt-card-meta">
+
+          <span class="nt-card-sub">
+            <a href="{% url 'watch_update' watch.pk %}">Change status</a>
+          </span>
+          <span class="nt-card-sub">
+            <a href="{% url 'watch_delete' watch.pk %}">Remove from profile</a>
+          </span>
+          
+        </div>
+      </div>
     {% empty %}
-      <p>You haven't added any shows to your portfolio yet.</p>
+      <p>You don't have any shows in your want-to-watch list yet.</p>
     {% endfor %}
   </div>
 </section>
 
-{% endblock %}
 
+
+  <!-- Currently Watching carousel -->
+  <section class="nt-row">
+    <h3 class="nt-row-title">Currently Watching</h3>
+    <div class="nt-card-row">
+      {% for watch in watching %}
+      <div class="nt-card">
+        <a href="{% url 'show_review_page' watch.show.pk %}">
+          {% if watch.show.poster_image %}
+            <div class="nt-card-image-wrapper">
+              <img src="{{ watch.show.poster_image.url }}" alt="{{ watch.show.title }}">
+            </div>
+          {% else %}
+            <div class="nt-card-placeholder">
+              {{ watch.show.title }}
+            </div>
+          {% endif %}
+        </a>
+
+          <div class="nt-card-meta">
+            <span class="nt-card-sub">
+              <a href="{% url 'watch_update' watch.pk %}">Change status</a>
+            </span>
+            <span class="nt-card-sub">
+            <a href="{% url 'watch_delete' watch.pk %}">Remove from profile</a>
+          </span>
+          </div>
+      </div>
+      {% empty %}
+        <p>You don't have any shows marked as still watching.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+
+  <!-- Finished carousel -->
+  <section class="nt-row">
+    <h3 class="nt-row-title">Finished Shows</h3>
+    <div class="nt-card-row">
+      {% for watch in finished %}
+      <div class="nt-card">
+        <a href="{% url 'show_review_page' watch.show.pk %}" >
+          {% if watch.show.poster_image %}
+            <div class="nt-card-image-wrapper">
+              <img src="{{ watch.show.poster_image.url }}" alt="{{ watch.show.title }}">
+            </div>
+          {% else %}
+            <div class="nt-card-placeholder">
+              {{ watch.show.title }}
+            </div>
+          {% endif %}
+          </a>
+          <div class="nt-card-meta">
+            <span class="nt-card-sub">
+              <a href="{% url 'watch_update' watch.pk %}">Change status</a>
+            </span>
+            <span class="nt-card-sub">
+              <a href="{% url 'watch_delete' watch.pk %}">Remove from profile</a>
+            </span>
+          </div>
+      </div>
+      {% empty %}
+        <p>You don't have any finished shows yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+{% endblock %}

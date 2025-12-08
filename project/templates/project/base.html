@@ -26,9 +26,11 @@
                     {{ request.user }}
                 </span>
 
-                <form action="{% url 'logout' %}" method="POST">
+                <form action="{% url 'logout' %}" method="POST" class="nt-logout-form">
                     {% csrf_token%}
-                    <li><input class='btn' type="submit" value="Logout"></li>
+                    <button type="submit" class="nt-auth-link nt-logout-link">
+                        Logout
+                    </button>
                 </form>
             {% else %}
                 <a class="nt-auth-link" href="{% url 'login' %}">Log in</a>

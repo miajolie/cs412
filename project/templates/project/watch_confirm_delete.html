@@ -1,0 +1,30 @@
+<!-- watch_confirm_delete.html -->
+<!-- deletes something the viewer wants to watch -->
+<!-- Mia Batista -->
+
+
+{% extends "project/base.html" %}
+
+{% block content %}
+  <div class="nt-panel nt-form-card">
+    <h2>Remove show from profile</h2>
+
+    <p class="nt-delete-text">
+      Are you sure you want to remove
+      <strong>{{ object.show.title }}</strong>
+      from your profile?
+    </p>
+
+    <form method="post" class="nt-form">
+      {% csrf_token %}
+      <div class="nt-form-actions">
+        <button type="submit" class="nt-btn nt-btn-primary">
+          Yes, remove it
+        </button>
+        <a href="{% url 'viewer_profile' %}" class="nt-btn nt-btn-tertiary">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

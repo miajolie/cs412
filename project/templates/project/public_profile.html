@@ -1,0 +1,115 @@
+<!-- project/public_profile -->
+<!-- way for someone to see someone elses profile -->
+<!-- Mia Batista -->
+
+{% extends "project/base.html" %}
+
+{% block content %}
+
+<div class="nt-panel nt-profile-header">
+    <div class="nt-profile-avatar">
+      {% if viewer.avatar %}
+        <img src="{{ viewer.avatar.url }}" alt="{{ viewer.display_name }}">
+      {% else %}
+        <div class="nt-profile-avatar-placeholder">
+          {{ viewer.display_name|default:viewer.user.username|slice:":1" }}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="nt-profile-meta">
+      <h2>{{ viewer.display_name|default:viewer.user.username }}</h2>
+      <p class="nt-small">@{{ viewer.user.username }}</p>
+
+      <p class="nt-profile-bio">
+        {% if viewer.bio %}
+          {{ viewer.bio }}
+        {% else %}
+          <span class="nt-small">No bio yet.</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+
+<!-- Users Reviews-->
+<section class="nt-row">
+  <h3 class="nt-row-title">Reviews by {{ viewer.display_name }}</h3>
+  <div class="nt-card-row">
+    {% for review in reviews %}
+      <a href="{% url 'review_detail_page' review.pk %}" class="nt-card">
+        <div class="nt-card-image-wrapper">
+          {% if review.show.poster_image %}
+            <img src="{{ review.show.poster_image.url }}" alt="{{ review.show.title }}">
+          {% else %}
+            <div class="nt-card-placeholder">{{ review.show.title }}</div>
+          {% endif %}
+        </div>
+        <div class="nt-card-meta">
+          <span class="nt-card-title">{{ review.show.title }}</span>
+          <span class="nt-card-sub">Rated: {{ review.rating }}/10</span>
+        </div>
+      </a>
+    {% empty %}
+      <p>{{ viewer.display_name }} hasn't reviewed any shows yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+
+<!-- User Watchlist-->
+<section class="nt-row">
+  <h3 class="nt-row-title">{{ viewer.display_name }}’s Watch List</h3>
+  <div class="nt-card-row">
+    {% for watch in watches %}
+      <a href="{% url 'show_detail' watch.show.pk %}" class="nt-card">
+        <div class="nt-card-image-wrapper">
+          {% if watch.show.poster_image %}
+            <img src="{{ watch.show.poster_image.url }}" alt="{{ watch.show.title }}">
+          {% else %}
+            <div class="nt-card-placeholder">{{ watch.show.title }}</div>
+          {% endif %}
+        </div>
+        <div class="nt-card-meta">
+          <span class="nt-card-title">{{ watch.show.title }}</span>
+          <span class="nt-card-sub">
+            {% if watch.status == "W" %}
+              Still Watching
+            {% else %}
+              Finished
+            {% endif %}
+          </span>
+        </div>
+      </a>
+    {% empty %}
+      <p>No shows in watchlist.</p>
+    {% endfor %}
+  </div>
+</section>
+
+
+<!-- Created Shows-->
+<section class="nt-row">
+  <h3 class="nt-row-title">Shows Created by {{ viewer.display_name }}</h3>
+  <div class="nt-card-row">
+    {% for show in created_shows %}
+      <a href="{% url 'show_detail' show.pk %}" class="nt-card">
+        <div class="nt-card-image-wrapper">
+          {% if show.poster_image %}
+            <img src="{{ show.poster_image.url }}" alt="{{ show.title }}">
+          {% else %}
+            <div class="nt-card-placeholder">{{ show.title }}</div>
+          {% endif %}
+        </div>
+        <div class="nt-card-meta">
+          <span class="nt-card-title">{{ show.title }}</span>
+          <span class="nt-card-sub">{{ show.genre }}</span>
+        </div>
+      </a>
+    {% empty %}
+      <p>{{ viewer.display_name }} hasn’t added any shows.</p>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}

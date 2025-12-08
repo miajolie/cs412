@@ -16,7 +16,7 @@
   </section>
 
   <section class="nt-row">
-    <div class="nt-card-row">
+    <div class="nt-show-grid">
       {% for show in shows %}
         <a href="{% url 'show_detail' show.pk %}" class="nt-card">
           {% if show.poster_image %}

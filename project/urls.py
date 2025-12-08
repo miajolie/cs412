@@ -23,10 +23,15 @@ urlpatterns=[
 
     # viewer
     path("profile/", views.ViewerProfileView.as_view(), name="viewer_profile"),
+    path("profile/edit/", views.ViewerUpdateView.as_view(), name="viewer_edit"),
+    path("profile/<int:pk>/", views.ViewerPublicProfileView.as_view(), name="viewer_public_profile"),
+
+
 
     # watch
     path("show/<int:show_id>/watch/add/", views.WatchCreateView.as_view(),name="watch_add"),
     path("watch/<int:pk>/edit/",views.WatchUpdateView.as_view(),name="watch_update"),
+    path("watch/<int:pk>/delete/", views.WatchDeleteView.as_view(), name="watch_delete"),
 
     #shows urls
     path('shows/', views.ShowListView.as_view(), name='show_list'),
@@ -46,7 +51,7 @@ urlpatterns=[
     path('shows/<int:show_id>/reviews/create/', views.ReviewCreateView.as_view(), name='review_create'),
     path('reviews/<int:pk>/update/', views.ReviewUpdateView.as_view(), name='review_update'),
     path('reviews/<int:pk>/delete/', views.ReviewDeleteView.as_view(), name='review_delete'),
-
+    path("reviews/<int:pk>/detail/",views.ReviewDetailPageView.as_view(),name="review_detail_page"),
 
 
     # Lists urls 

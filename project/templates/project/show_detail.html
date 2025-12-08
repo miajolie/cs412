@@ -82,7 +82,11 @@
         <li>
           <div class="nt-review-header">
             <span class="nt-review-rating">⭐ {{ review.rating }}</span>
-            <span class="nt-review-author">{{ review.viewer.display_name }}</span>
+            <span class="nt-review-author">
+              <a href="{% url 'viewer_public_profile' review.viewer.pk %}" class="nt-user-link">
+              {{ review.viewer.display_name }}
+              </a>
+            </span>
           </div>
           <p class="nt-review-text">{{ review.text }}</p>
 

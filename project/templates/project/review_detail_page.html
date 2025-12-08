@@ -1,0 +1,56 @@
+<!-- review_detail_page.html -->
+<!-- public view of the reivew -->
+<!-- Mia Batista -->
+
+
+{% extends "project/base.html" %}
+
+{% block content %}
+<section class="nt-detail">
+  <div class="nt-detail-main">
+
+    <!-- LEFT: poster -->
+    <div class="nt-detail-poster">
+      {% if show.poster_image %}
+        <img src="{{ show.poster_image.url }}" alt="{{ show.title }}">
+      {% else %}
+        <div class="nt-card-placeholder" style="width:220px;">
+          {{ show.title }}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- RIGHT: review content -->
+    <div class="nt-detail-text">
+      <h2>{{ show.title }}</h2>
+      <p class="nt-detail-sub">
+        Reviewed by
+        <a href="{% url 'viewer_profile' review.viewer.pk %}" class="nt-user-link">
+          {{ review.viewer.display_name }}
+        </a>
+      </p>
+
+      <h3>Review</h3>
+      <p class="nt-review-text">{{ review.text }}</p>
+      <p class="nt-detail-sub">⭐ Rating: {{ review.rating }}</p>
+
+      <div class="nt-detail-actions">
+        <a href="{% url 'show_detail' show.pk %}" class="nt-btn nt-btn-secondary">
+          View show page
+        </a>
+
+        {# Only the owner sees edit/delete #}
+        {% if request.user.is_authenticated and review.viewer.user == request.user %}
+          <a href="{% url 'review_update' review.pk %}" class="nt-btn nt-btn-secondary">
+            Edit review
+          </a>
+          <a href="{% url 'review_delete' review.pk %}" class="nt-btn nt-btn-tertiary">
+            Delete review
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
