@@ -1,0 +1,20 @@
+<!-- viewer_form.html -->
+<!-- form to edit the profile fields -->
+<!-- Mia Batista -->
+
+{% extends "project/base.html" %}
+
+{% block content %}
+  <div class="nt-panel nt-form-card">
+    <h2>Edit Profile</h2>
+
+    <form method="post" enctype="multipart/form-data" class="nt-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="nt-form-actions">
+        <button type="submit" class="nt-btn nt-btn-primary">Save changes</button>
+        <a href="{% url 'viewer_profile' %}" class="nt-btn nt-btn-tertiary">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}
