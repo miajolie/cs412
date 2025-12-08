@@ -61,9 +61,14 @@
 
         <div class="nt-card-meta">
           
-          <span class="nt-card-sub">
-            <a href="{% url 'watch_update' watch.pk %}">Change status</a>
-          </span>
+          <span class="nt-card-sub edit-link">
+              <svg class="edit-icon" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                      d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+              </svg>
+              <a href="{% url 'watch_update' watch.pk %}">Change status</a>
+              
+            </span>
           <span class="nt-card-sub">
             <a href="{% url 'watch_delete' watch.pk %}">Remove from profile</a>
           </span>
@@ -95,9 +100,14 @@
 
         <div class="nt-card-meta">
 
-          <span class="nt-card-sub">
-            <a href="{% url 'watch_update' watch.pk %}">Change status</a>
-          </span>
+          <span class="nt-card-sub edit-link">
+              <svg class="edit-icon" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                      d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+              </svg>
+              <a href="{% url 'watch_update' watch.pk %}">Change status</a>
+              
+            </span>
           <span class="nt-card-sub">
             <a href="{% url 'watch_delete' watch.pk %}">Remove from profile</a>
           </span>
@@ -131,8 +141,13 @@
         </a>
 
           <div class="nt-card-meta">
-            <span class="nt-card-sub">
+            <span class="nt-card-sub edit-link">
+              <svg class="edit-icon" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                      d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+              </svg>
               <a href="{% url 'watch_update' watch.pk %}">Change status</a>
+              
             </span>
             <span class="nt-card-sub">
             <a href="{% url 'watch_delete' watch.pk %}">Remove from profile</a>
@@ -164,8 +179,15 @@
           {% endif %}
           </a>
           <div class="nt-card-meta">
-            <span class="nt-card-sub">
+
+            
+            <span class="nt-card-sub edit-link">
+              <svg class="edit-icon" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                      d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+              </svg>
               <a href="{% url 'watch_update' watch.pk %}">Change status</a>
+
             </span>
             <span class="nt-card-sub">
               <a href="{% url 'watch_delete' watch.pk %}">Remove from profile</a>

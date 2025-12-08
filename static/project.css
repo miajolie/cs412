@@ -650,3 +650,14 @@ a:hover {
 .nt-list-card-date {
   opacity: 0.8;
 }
+
+.edit-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.edit-icon {
+  width: 12px;
+  height: 12px;
+}
