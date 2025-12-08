@@ -83,9 +83,15 @@
           <div class="nt-review-header">
             <span class="nt-review-rating">⭐ {{ review.rating }}</span>
             <span class="nt-review-author">
+              {% if request.user.is_authenticated and review.viewer == request.user.viewer %}
+              <a href="{% url 'viewer_profile' %}" class="nt-user-link">
+                {{ review.viewer.display_name }}
+              </a>
+              {% else %}
               <a href="{% url 'viewer_public_profile' review.viewer.pk %}" class="nt-user-link">
               {{ review.viewer.display_name }}
               </a>
+              {% endif %}
             </span>
           </div>
           <p class="nt-review-text">{{ review.text }}</p>

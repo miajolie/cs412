@@ -26,9 +26,15 @@
 
           <div class="nt-list-card-sub">
             By
-            <a href="{% url 'viewer_public_profile' list.viewer.pk %}" class="nt-user-link">
+            {% if request.user.is_authenticated and list.viewer == request.user.viewer %}
+              <a href="{% url 'viewer_profile' %}" class="nt-user-link">
+                {{ list.viewer.display_name }}
+              </a>
+            {% else %}
+              <a href="{% url 'viewer_public_profile' list.viewer.pk %}" class="nt-user-link">
               {{ list.viewer.display_name }}
-            </a>
+              </a>
+            {% endif %}
           </div>
 
           <div class="nt-list-card-sub nt-list-card-description">
