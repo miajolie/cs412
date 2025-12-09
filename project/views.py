@@ -374,6 +374,12 @@ class SeasonUpdateView(LoginRequiredMixin, UpdateView):
         query = super().get_queryset()
         viewer = Viewer.objects.get(user=self.request.user)
         return query.filter(show__created_by = viewer)
+    
+    def get_context_data(self, **kwargs):
+        '''to get the show pk'''
+        context = super().get_context_data(**kwargs)
+        context['show'] = Show.objects.get(pk=self.kwargs['show_id'])
+        return context
 
     def get_success_url(self):
         '''once updated, return to the show detail'''
