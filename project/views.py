@@ -378,7 +378,7 @@ class SeasonUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         '''to get the show pk'''
         context = super().get_context_data(**kwargs)
-        season = self.get_object()
+        season = self.object
         context['show'] = season.show
         return context
 
