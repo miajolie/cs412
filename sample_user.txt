@@ -1,0 +1,5 @@
+Username/password
+
+Admin: miajolie/mia0912
+
+SampleUser: CS412Student/miajolie0912
