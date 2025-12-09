@@ -378,7 +378,7 @@ class SeasonUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         '''to get the show pk'''
         context = super().get_context_data(**kwargs)
-        context['show'] = Show.objects.get(pk=self.kwargs['show_id'])
+        context['show'] = Show.objects.get(pk=self.kwargs['pk'])
         return context
 
     def get_success_url(self):
