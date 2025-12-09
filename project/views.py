@@ -450,6 +450,12 @@ class ReviewUpdateView(LoginRequiredMixin, UpdateView):
         query = super().get_queryset()
         viewer = Viewer.objects.get(user=self.request.user)
         return query.filter(viewer=viewer)
+    
+    def get_context_data(self, **kwargs):
+        '''pass in context for the review'''
+        context = super().get_context_data(**kwargs)
+        context["show"] = self.object.show
+        return context
 
     def get_success_url(self):
         '''return to show detail after form completes'''
